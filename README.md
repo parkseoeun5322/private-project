@@ -18,7 +18,11 @@
 * ***SNS 로그인***(카카오 - GlobalApplication.java / SessionCallback.java)
 * ***회원가입***(SignUpFormActivity.java) - 이메일 보내기(GMailSender.java / JSSEProvider.java)
 * ***위치 찾기 화면***(LocationActivity.java / SocialLocationActivity.java / GpsTracker.java) 
-* ***아이디/비밀번호 찾기 화면***(SearchIDActivity.java / IdFragment.java / PwFragment.java )
+* ***아이디/비밀번호 찾기 화면***(SearchIDActivity.java / IdFragment.java / PwFragment.java)
+
+
+##### 1) 로그인
+![1 로그인 화면](https://user-images.githubusercontent.com/78471888/106757777-1cc76080-6674-11eb-8805-238930fa6146.png)
 
 
 
