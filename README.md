@@ -9,7 +9,7 @@
 * DataBase : Oracle Database 11g Express Edition
 
 ## DB
-![0 웹_DB](https://user-images.githubusercontent.com/78471888/106755655-b3465280-6671-11eb-97f5-5f1139c623ee.png){: width="300"}
+![0 웹_DB](https://user-images.githubusercontent.com/78471888/106755655-b3465280-6671-11eb-97f5-5f1139c623ee.png){: width="300" height="700"}
 
 ## App
 
