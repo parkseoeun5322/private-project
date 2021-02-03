@@ -13,7 +13,7 @@
 
 ## App
 
-1 App 담당 주요 기능
+***1. App 담당 주요 기능***
 * 로그인(LoginActivity.java)
 * SNS 로그인(카카오 - GlobalApplication.java / SessionCallback.java)
 * 회원가입(SignUpFormActivity.java) - 이메일 보내기(GMailSender.java / JSSEProvider.java)
