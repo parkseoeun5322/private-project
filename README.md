@@ -9,7 +9,7 @@
 * DataBase : Oracle Database 11g Express Edition
 
 ## DB
-https://github.com/parkseoeun5322/Project_D/issues/1#issue-800344332
+![0 웹_DB](https://user-images.githubusercontent.com/78471888/106755655-b3465280-6671-11eb-97f5-5f1139c623ee.png)
 
 ## App
 
