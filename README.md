@@ -13,7 +13,7 @@
 ![0 웹_DB](https://user-images.githubusercontent.com/78471888/106755655-b3465280-6671-11eb-97f5-5f1139c623ee.png)
 ```
 ```
-## App
+## App(Android)
 ```
 ```
 ### 1. App 담당 파트
