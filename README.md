@@ -1,4 +1,4 @@
-# Project_D
+# 대여안대여(Project_D)
 개인 간 물품 대여를 중개하는 어플리케이션/웹 사이트
 
 
@@ -13,17 +13,14 @@
 
 ## App
 
-### App 담당 주요 기능
-* 로그
-LoginActivity.java
-GMailSender.java
-GlobalApplication.java
-GpsTracker.java
-IdFragment.java
-JSSEProvider.java
-LocationActivity.java
-LoginActivity.java
-PwFragment.java
-SessionCallback.java
-SignUpFormActivity.java
-SocialLocationActivity.java
+**App 담당 주요 기능**
+* 로그인(LoginActivity.java)
+* SNS 로그인(카카오 - GlobalApplication.java / SessionCallback.java)
+* 회원가입(SignUpFormActivity.java) - 이메일 보내기(GMailSender.java / JSSEProvider.java)
+* 위치 찾기 화면(LocationActivity.java / SocialLocationActivity.java / GpsTracker.java) 
+* 아이디/비밀번호 찾기 화면(SearchIDActivity.java / IdFragment.java / PwFragment.java )
+
+
+
+
+
