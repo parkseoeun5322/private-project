@@ -9,7 +9,7 @@
 * DataBase : Oracle Database 11g Express Edition
 
 ## DB
-https://drive.google.com/file/d/1EyK1Cve4-lHqynoVE3HXH79a7LlBg19P/view?usp=sharing
+![DB](https://drive.google.com/file/d/1EyK1Cve4-lHqynoVE3HXH79a7LlBg19P/view?usp=sharing)
 
 ## App
 
