@@ -23,7 +23,7 @@
 
 #### 1) 로그인
 
-![1 로그인 화면](https://user-images.githubusercontent.com/78471888/106757777-1cc76080-6674-11eb-8805-238930fa6146.png)
+![1 로그인 화면](https://user-images.githubusercontent.com/78471888/106757777-1cc76080-6674-11eb-8805-238930fa6146.png){: width="100" height="100"}
 * 이메일 형식의 아이디 사용 
 * 네이버, 카카오 API를 활용한 SNS 로그인 및 회원정보 저장 구현
 
