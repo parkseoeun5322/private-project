@@ -72,6 +72,7 @@
 #### ③ 채팅방
 ![불판 채팅 페이지](https://user-images.githubusercontent.com/78471888/106893551-10eda400-6731-11eb-8818-00d4f4f6e0e2.png)
 * Websocket 라이브러리 + Stomp 프로토콜을 활용하여 실시간 채팅 서비스 지원
+* 다대일 채팅 
 ```
 ```
 #### 5) 드라마 리뷰 페이지
