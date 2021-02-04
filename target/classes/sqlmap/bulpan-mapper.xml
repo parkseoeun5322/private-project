@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mapper 태그를 사용하기 위한 코드 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bulpan.mapper">
+	<select id="selectNickname" resultType="Integer">
+		select chatting_nickName from chatting 
+		where chatting_writer = #{chatting_writer}
+		group by chatting_nickname
+	</select>
+	<select id="selectMaxNickname" resultType="Integer">
+		select nvl(max(chatting_nickName), 0) from chatting
+	</select>
+	<select id="countWriter" resultType="Integer">
+		select count(*) from 
+			(select * from chatting where chatting_roomNo = #{chatting_roomNo}) 
+		where chatting_writer = #{chatting_writer}
+	</select>
+	
+	<select id="selectChatList" resultType="bulpan.ChatVO">
+	 <![CDATA[ 
+		select c.* from
+			(select * from chatting
+			where chatting_roomNo = #{chatting_roomNo}) c
+		where rownum <= 10
+		order by chatting_no
+	]]>
+	</select>
+
+	<select id="selectFirstChatList" resultType="bulpan.ChatVO">	
+		select c.*, to_char(chatting_time, 'yy/mm/dd') chatting_date from
+			(select * from chatting
+			where chatting_roomNo = #{chatting_roomNo}) c
+		order by chatting_no	
+	</select>
+	
+	<update id="read">
+		update bulpan set bulpan_readcnt = bulpan_readcnt + 1 where bulpan_no = #{bulpan_no}
+	</update>
+	
+	<insert id="insertChat">
+		insert into chatting (chatting_no, chatting_writer, chatting_content, 
+							  chatting_roomNo, chatting_id, chatting_nickName)
+				values( (select nvl(max(chatting_no), 0) from chatting where chatting_roomNo = #{chatting_roomNo}) + 1,
+             			#{chatting_writer}, #{chatting_content}, #{chatting_roomNo}, 
+             			#{chatting_id}, #{chatting_nickName} )
+	</insert>
+	
+	<!-- 불판 글 삭제 -->
+	<delete id="delete">
+		delete from bulpan where bulpan_no = #{bulpan_no}
+	</delete>
+	
+	<!-- 글 변경사항 수정 -->
+	<update id="update">
+		update bulpan set bulpan_title = #{bulpan_title}, 
+		bulpan_header = #{bulpan_header}
+		where bulpan_no = #{bulpan_no}
+	</update>
+	
+	<!-- 글 상세 조회 -->
+	<select id="detail" resultType="bulpan.BulpanVO">
+		select * from bulpan where bulpan_no = #{bulpan_no}
+	</select>
+
+	 <sql id="search_where">
+	 	<if test="search == 'bulpan_title'">
+	 		where ${search}
+	 		like '%' || #{keyword} || '%'
+	 	</if>
+	 </sql>
+	 
+	 <!-- 말머리 검색 후 목록 조회 -->
+	 <select id="headerList" resultType="bulpan.BulpanVO">
+	 	select n.* from
+		 	(select n.*, rownum bulpan_rownum from
+			 	(select * from bulpan
+			 	where bulpan_header = #{header}
+			 	order by bulpan_no) n
+			 order by bulpan_rownum desc) n
+		where bulpan_rownum between #{beginList} and #{endList}
+	 </select>
+	 
+	 <!-- 페이징 처리를 위한 말머리 조건에 해당하는 글 목록 건수 조회 -->
+	 <select id="headerTotal" resultType="integer">
+	 	select count(*) from bulpan
+	 	where bulpan_header = #{header}
+	 </select>
+	 
+	 <!-- 각 페이지에 출력할 목록 조회 -->
+	 <select id="list" resultType="bulpan.BulpanVO">
+	 	select n.* from
+		 	(select n.*, rownum bulpan_rownum from
+			 	(select * from bulpan
+			 	<include refid="search_where"/>
+			 	order by bulpan_no) n
+			 order by bulpan_rownum desc) n
+		where bulpan_rownum between #{beginList} and #{endList}
+	 </select>
+	 
+	 <!-- 페이징 처리를 위한 검색 조건에 해당하는 글 목록 건수 조회 -->
+	 <select id="total" resultType="integer">
+	 	select count(*) from bulpan
+	 	<include refid="search_where" />
+	 </select>
+	 
+	 <!-- 불판 글 저장 -->
+	<insert id="insert">
+		insert into bulpan(bulpan_title, bulpan_header, bulpan_writer) values(#{bulpan_title}, #{bulpan_header}, #{bulpan_writer})
+	</insert>	 
+</mapper>

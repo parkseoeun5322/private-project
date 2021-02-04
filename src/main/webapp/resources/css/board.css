@@ -1,0 +1,101 @@
+@charset "UTF-8";
+
+/* 게시판 관련 CSS */
+
+/* 1. 글쓰기 화면 관련 CSS */
+.input-wrap {
+	width: 1000px;
+	background-color: #f4f4f4;
+	margin: 10px auto 0;
+	padding: 20px;
+}
+.form-style-i { width: 100%; margin: 0 0 30px 0; }
+.form-style-i ul:first-child { overflow: hidden; margin: 0 0 4px 0; }
+.form-style-i ul:first-child > li { float: left; }
+.form-style-i select { height: 29px; margin: 0 3px 0 0; }
+.form-style-i ul:first-child input { line-height: 27px; padding: 0 0 0 10px; }
+.form-style-i ul:nth-child(2) input {
+	width: 100%;
+	box-sizing: border-box;
+	line-height: 30px;
+	padding: 0 0 0 10px;
+}
+
+.btnSet { overflow: hidden; padding: 20px; }
+.btnSet > a { padding: 10px 20px; }
+.btnSet > a:first-child { display: inline !important; margin: 0 10px 0 0; padding: 10px 20px; }
+.btn-empty {
+	border: 1px solid #787878;
+	padding: 10px;
+	color: #787878 !important;
+	border-radius: 5px;
+	background-color: #ffffff;
+}
+
+/* 2. 글 목록 화면 관련 CSS */
+.table-style-b {
+	width: 1000px;
+	margin: 30px auto 0;
+	table-layout: fixed;
+}
+
+.table-style-b th {
+	background-color: #ededed;
+	border-top: 1px solid #707070;
+	border-bottom: 1px solid #707070;
+	padding: 15px 0;
+}
+
+.table-style-b td {
+	border-bottom: 1px solid #cccccc;
+	padding: 15px 0;
+	font-size: 14px;
+}
+
+.table-style-b td:nth-child(3) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+	padding: 0 0 0 10px;
+}
+
+.table-style-b td:nth-child(3)>a:nth-child(1) { font-weight: bold; }
+.table-style-b td:nth-child(3)>a:nth-child(2) { margin: 0 0 0 5px; }
+
+.list-bottom { width: 1000px; margin: 30px auto 50px; }
+.form-style-b div { overflow: hidden; }
+.form-style-b ul:first-child { float: left; overflow: hidden; width: 500px; }
+.form-style-b ul:last-child { float: right; }
+.form-style-b ul:first-child li { float: left; }
+.form-style-b select { height: 36px; }
+.form-style-b input[type=text] { height: 32px; padding: 0 0 0 5px; }
+.form-style-i select, .form-style-i input, .form-style-i textarea { border: 1px solid #ddd; }
+.form-style-i textarea { 
+	width: 957px; height: 500px; 
+	padding: 10px; box-sizing: border-box;
+	font-size: 15px; 
+	resize: none;
+}
+.form-style-i ul:nth-child(2) { overflow: hidden; margin: 0 0 4px 0;s }
+.form-style-i ul:nth-child(2) > li { float: left; }
+.form-style-i ul:nth-child(2) > li:first-child { width: 19.5%; margin: 0 3px 0 0; }
+.form-style-i ul:nth-child(2) > li:last-child { width: 80%; }
+.form-style-i ul:nth-child(2) select { width: 100%; height: 32px; }
+
+#deleteBtn {
+	background-color: #787878;
+	color: #ffffff !important;
+	padding: 5px;
+	margin-top: -5px;
+	border-radius: 3px;
+	border: 1px solid #787878;
+}
+
+#resetBtn {
+	color: #787878 !important;
+	padding: 5px;
+	border: 1px solid #787878;
+	border-radius: 3px;
+	margin: -5px 5px 0 0;
+}

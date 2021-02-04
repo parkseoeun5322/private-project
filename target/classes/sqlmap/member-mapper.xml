@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mapper 태그를 사용하기 위한 코드 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member.mapper">
+	<!-- 카카오 최초 로그인 시 DB 저장 -->
+	<select id="kakao_join">
+		insert into member(member_id, member_nickname, member_loginType, member_token)
+		values ( #{member_id}, #{member_nickname}, #{member_loginType}, #{member_token} )	
+	</select>
+
+	<!-- 네이버 최초 로그인 시 DB 저장 -->
+	<select id="naver_join">
+		insert into member(member_id, member_nickname, member_name, member_loginType, member_token)
+		values ( #{member_id}, #{member_nickname}, #{member_name}, #{member_loginType}, #{member_token} )
+	</select>	
+	
+	<!-- 네이버 로그인(DB 저장 OX) -->
+	<select id="socialLogin" resultType="member.MemberVO">
+		select * from member where member_id=#{member_id}
+	</select>
+	
+	<!-- 최근 로그인 날짜 업데이트 -->
+	<update id="update_loginDate">
+		update member set member_recent_login_date = #{member_recent_login_date}
+		where member_id = #{member_id}
+	</update>
+
+	<update id="update_token">
+		update member set member_token = #{member_token}
+		where member_id = #{member_id}
+	</update>
+
+	<select id="id_check" resultType="integer">
+		select count(*) from member where member_id=#{id}
+	</select>
+	
+	<select id="nickname_check" resultType="integer">
+		select count(*) from member where member_nickname=#{nickname}
+	</select>
+	
+	<select id="login" resultType="member.MemberVO">
+		select * from member where member_id=#{id} and member_pw=#{pw}
+	</select>
+
+	<select id="join">
+		insert into member(member_id, member_pw, member_name, member_nickname)
+		values ( #{member_id}, #{member_pw}, #{member_name}, #{member_nickname} )
+	</select>
+</mapper>

@@ -1,0 +1,145 @@
+------------------------------- Bulpan 테이블
+
+create table bulpan(
+    bulpan_no number constraint board_no_pk primary key not null,
+    board_category varchar2(20) default '불판' not null,
+    bulpan_title varchar2(300) not null,
+    bulpan_content varchar2(4000),
+    bulpan_header varchar2(100),
+    bulpan_division varchar2(20),
+    bulpan_writer varchar2(20) not null,
+    bulpan_writedate date default sysdate not null,
+    bulpan_readcnt number default 0,
+    bulpan_pushcnt number default 0,
+    bulpan_filename varchar2(300),
+    bulpan_filepath varchar2(300),
+    constraint bulpan_writer_fk FOREIGN KEY(bulpan_writer) REFERENCES member(member_id)  on delete CASCADE
+);
+
+CREATE SEQUENCE seq_bulpan START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_bulpan
+    BEFORE INSERT on bulpan
+    FOR EACH ROW
+BEGIN
+    SELECT seq_bulpan.nextval into :new.bulpan_no from dual;
+END;
+/
+
+commit;
+
+
+-------------------------------- Chatting 테이블
+CREATE TABLE chatting (
+    chatting_id VARCHAT2(50) CONSTRAINT chatting_no_pk PRIMARY KEY,
+    chatting_no NUMBER
+    chatting_writer VARCHAR2(20),
+    chatting_time DATE DEFAULT sysdate,
+    chatting_content VARCHAR2(4000),
+    chatting_roomNo NUMBER,
+    CONSTRAINT chatting_writer_fk FOREIGN KEY(chatting_writer) REFERENCES member(member_id)  on delete CASCADE,
+    CONSTRAINT chatting_roomNo_fk FOREIGN KEY(chatting_roomNo) REFERENCES bulpan(bulpan_no) ON DELETE CASCADE
+);
+
+ALTER TABLE chatting ADD chatting_nickname NUMBER;
+
+commit;
+
+
+-------------------------------- Review 테이블
+create table review(
+    review_no number constraint review_no_pk primary key not null,
+    review_category varchar2(20) default '리뷰' not null,
+    review_title varchar2(300) not null,
+    review_content varchar2(4000),
+    review_header varchar2(100),
+    review_division varchar2(20),
+    review_writer varchar2(20) not null,
+    review_writedate date default sysdate not null,
+    review_readcnt number default 0,
+    review_pushcnt number default 0,
+    review_filename varchar2(300),
+    review_filepath varchar2(300),
+    constraint review_writer_fk FOREIGN KEY(review_writer) REFERENCES member(member_id)  on delete CASCADE
+);
+
+CREATE SEQUENCE seq_review START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_review
+    BEFORE INSERT on review
+    FOR EACH ROW
+BEGIN
+    SELECT seq_review.nextval into :new.review_no from dual;
+END;
+/
+
+ALTER TABLE review ADD review_scrapcnt number default 0;
+
+--varchar2(4000) 용량 문제
+ALTER TABLE review DROP COLUMN review_content;
+ALTER TABLE review ADD (review_content CLOB); 
+
+COMMIT;
+
+-------------------------------- Push 테이블
+
+create table push(
+    push_no number constraint push_no_pk primary key not null,
+    push_boardNo number not null,
+    push_id varchar2(20) not null,
+    constraint push_boardNo_r_fk FOREIGN KEY(push_boardNo) REFERENCES review(review_no)  on delete CASCADE,
+    constraint push_id_fk FOREIGN KEY(push_id) REFERENCES member(member_id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE seq_push START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_push
+    BEFORE INSERT on push
+    FOR EACH ROW
+BEGIN
+    SELECT seq_push.nextval into :new.push_no from dual;
+END;
+/
+
+ALTER TABLE push ADD push_category varchar2(20) not null;
+
+commit;
+
+-------------------------------- Scrap 테이블
+
+create table scrap(
+    scrap_no number constraint scrap_no_pk primary key not null,
+    scrap_boardNo number not null,
+    scrap_id varchar2(20) not null,
+    scrap_date date default sysdate,
+    scrap_title varchar2(300) not null,
+    scrap_category varchar2(20) not null,
+    constraint scrap_boardNo_r_fk FOREIGN KEY(scrap_boardNo) REFERENCES review(review_no)  on delete CASCADE,
+    constraint scrap_id_fk FOREIGN KEY(scrap_id) REFERENCES member(member_id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE seq_scrap START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_scrap
+    BEFORE INSERT on scrap
+    FOR EACH ROW
+BEGIN
+    SELECT seq_scrap.nextval into :new.scrap_no from dual;
+END;
+/
+
+commit;
+
+-------------------------------- Board_Comment 테이블
+
+create table board_comment (
+	comment_no number constraint board_comment_no_pk primary key,
+	comment_bno number
+		constraint board_comment_bno_fk references review(review_no) on delete cascade,	
+	comment_writer varchar2(20)	
+		constraint board_comment_writer_fk references member(member_id) on delete cascade,
+	comment_content clob,
+	comment_writedate date default sysdate,
+    comment_writetime varchar2(10),
+    comment_category varchar2(20)
+);
