@@ -12,6 +12,17 @@
 			
 			return need;
 		}
-	}); 
+	});
+	
+	$(".need_div option").each(function() {
+		if ( this.value == "" ) {
+			alert("분류를 입력하세요");
+			need = false;
+			
+			return need;
+		}
+	});
+
 	return need;
+	
 } //necessary()

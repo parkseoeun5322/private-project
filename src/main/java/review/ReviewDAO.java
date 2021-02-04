@@ -97,5 +97,13 @@ public class ReviewDAO implements ReviewService {
 		return sql.delete("review.mapper.delete", review_no);
 	}
 
+	@Override
+	public ReviewPage review_divList(ReviewPage page) {
+		page.setTotalList((Integer)sql.selectOne("review.mapper.divTotal", page));
+		List<ReviewVO> list = sql.selectList("review.mapper.divList", page);
+		page.setList(list);
+		return page;
+	}
+
 
 }

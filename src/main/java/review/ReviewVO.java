@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class ReviewVO {
 	private int review_no;
-	private String review_category;
+	private String board_category;
 	private String review_title;
 	private String review_content;
 	private String review_header;

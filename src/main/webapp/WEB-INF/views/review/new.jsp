@@ -53,7 +53,7 @@
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
-			<a class="btn-empty" href="list.bu">취소</a>
+			<a class="btn-empty" href="list.re">취소</a>
 		</div>
 	</div>
 	<script type="text/javascript" src="js/need_check.js"></script>

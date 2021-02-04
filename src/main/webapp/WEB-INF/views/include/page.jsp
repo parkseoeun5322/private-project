@@ -65,6 +65,7 @@
 		$("[name=curPage]").val(no);
 		$("[name=keyword]").val("${page.keyword}");
 		$("[name=header]").val("${page.header}");
+		$("[name=division]").val("${page.division}");
 		$("form").submit();
 	}
 </script>

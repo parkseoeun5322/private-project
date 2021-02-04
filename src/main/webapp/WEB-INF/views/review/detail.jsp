@@ -58,7 +58,7 @@
 				$.ajax({
 					url: "push",
 					data: { push_no: ${vo.review_no},
-							push_category: "${vo.review_category}" },
+							push_category: "${vo.board_category}" },
 					success:function(data) {
 						if(data) {
 							/*
@@ -115,7 +115,7 @@
 				$.ajax({
 					url: "scrap",
 					data: { scrap_boardNo: ${vo.review_no},
-							scrap_category: "${vo.review_category}",
+							scrap_category: "${vo.board_category}",
 							scrap_title: "${vo.review_title}" },
 					success:function(data) {
 						if(data) {
@@ -161,7 +161,7 @@
 	<div class="detail_style">
 		<ul>
 			<li>
-				<div>${vo.review_category }</div>
+				<div>${vo.board_category }</div>
 				<div><a href="">${vo.review_header })</a>${vo.review_title }</div>
 				<div>${vo.review_writedate }</div>
 			</li>

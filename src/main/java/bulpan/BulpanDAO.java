@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import review.ReviewVO;
+
 @Repository
 public class BulpanDAO implements BulpanService {
 	@Autowired private SqlSession sql;
@@ -49,6 +51,14 @@ public class BulpanDAO implements BulpanService {
 	@Override
 	public int bulpan_delete(int bulpan_no) {
 		return sql.delete("bulpan.mapper.delete", bulpan_no);
+	}
+
+	@Override
+	public BulpanPage bulpan_divList(BulpanPage page) {
+		page.setTotalList((Integer)sql.selectOne("bulpan.mapper.divTotal", page));
+		List<BulpanVO> list = sql.selectList("bulpan.mapper.divList", page);
+		page.setList(list);
+		return page;
 	}
 
 }

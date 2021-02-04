@@ -75,16 +75,8 @@
 </script>
 </head>
 <body>
-	<div class="list-top">
-		<ul>
-			<li class="on"><a data-div="" href="">전체</a></li>
-			<li><a data-div="" href="">한드</a></li>
-			<li><a data-div="" href="">미드</a></li>
-			<li><a data-div="" href="">영드</a></li>
-			<li><a data-div="" href="">일드</a></li>
-			<li><a data-div="" href="">중드</a></li>
-			<li><a data-div="" href="">기타</a></li>
-		</ul>
+	<div class="divSet">
+		<jsp:include page="/WEB-INF/views/include/division.jsp"/>
 	</div>
 	<div class="data-list">
 		<table class="table-style-b">
@@ -117,6 +109,7 @@
 		<form action="list.bu" method="post" class="form-style-b">
 			<input type="hidden" name="curPage" value="1">
 			<input type="hidden" name="header" value="${page.header }">
+			<input type="hidden" name="division" value="${page.division }">
 			<input type="hidden" name="bulpan_no">
 			<div>
 				<ul>

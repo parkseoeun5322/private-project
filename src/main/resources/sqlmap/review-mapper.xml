@@ -4,6 +4,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="review.mapper">
+	<!-- 글 분류 처리 -->
+	 <select id="divList" resultType="review.ReviewVO">
+	 	select n.* from
+		 	(select n.*, rownum review_rownum from
+			 	(select * from review
+			 	where review_division = #{division}
+			 	order by review_no) n
+			 order by review_rownum desc) n
+		where review_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="divTotal" resultType="integer">
+	 	select count(*) from review
+	 	where review_division = #{division}
+	 </select>
+
 	<!-- 글 삭제 처리 -->
 	<delete id="delete">
 		delete from review where review_no = #{review_no}

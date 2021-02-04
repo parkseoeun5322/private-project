@@ -75,4 +75,9 @@ public class ReviewServiceImpl implements ReviewService {
 		return dao.review_delete(review_no);
 	}
 
+	@Override
+	public ReviewPage review_divList(ReviewPage page) {
+		return dao.review_divList(page);
+	}
+
 }

@@ -6,6 +6,7 @@ import common.ScrapVO;
 public interface ReviewService {
 	ReviewPage review_list(ReviewPage page);			//리뷰 글 목록 조회
 	ReviewPage review_headerList(ReviewPage page);		//해당 헤더 검색 후 불판 글 목록 조회
+	ReviewPage review_divList(ReviewPage page);			//글 분류 조회
 	
 	int review_insert(ReviewVO vo);						//리뷰 글쓰기 저장
 	

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import bulpan.BulpanPage;
+import bulpan.BulpanVO;
 import common.CommonService;
 import common.PushVO;
 import common.ScrapVO;
@@ -29,9 +31,9 @@ public class ReviewController {
 		//선택한 방명록 글을 DB에서 삭제한 후 목록화면으로 연결
 		service.review_delete(review_no);
 		model.addAttribute("page", page);
-		model.addAttribute("url", "list.bo");
+		model.addAttribute("url", "list.re");
 		
-		return "board/redirect";
+		return "review/redirect";
 	}
 	
 	//스크랩 취소
@@ -165,8 +167,8 @@ public class ReviewController {
 	
 	// 리뷰 글 목록 화면 요청
 	@RequestMapping("/list.re")
-	public String list(Model model, HttpSession session, 
-						String search, String keyword, String header,
+	public String list(Model model, HttpSession session, String search, 
+						String keyword, String header, String division,
 						@RequestParam(defaultValue = "10") int pageList, 
 						@RequestParam(defaultValue = "1") int curPage) {
 		session.setAttribute("category", "re");
@@ -177,13 +179,33 @@ public class ReviewController {
 		page.setKeyword(keyword);
 		page.setPageList(pageList);
 		page.setHeader(header);
+		page.setDivision(division);
 
-		if (header == null || header.equals("")) {
-			// 보통 글 목록 화면 요청 시 & 검색 후 글 목록 화면 요청 시
-			model.addAttribute("page", service.review_list(page));
-		} else {
+		if (header != null && !header.equals("")) {
 			// 말머리 검색 후 글 목록 화면 요청 시
 			model.addAttribute("page", service.review_headerList(page));
+			
+		} else if (division != null && !division.equals("")) {
+			model.addAttribute("page", service.review_divList(page));
+			
+			if (division.equals("한드")) {
+				session.setAttribute("division", "ko");
+			} else if (division.equals("미드")) {
+				session.setAttribute("division", "am");
+			} else if (division.equals("영드")) {
+				session.setAttribute("division", "br");
+			} else if (division.equals("일드")) {
+				session.setAttribute("division", "ja");
+			} else if (division.equals("중드")) {
+				session.setAttribute("division", "ch");
+			} else if (division.equals("기타")) {
+				session.setAttribute("division", "et");
+			}
+			
+		} else {
+			// 보통 글 목록 화면 요청 시 & 검색 후 글 목록 화면 요청 시
+			session.setAttribute("division", "to");
+			model.addAttribute("page", service.review_list(page));
 		}
 
 		return "review/list";

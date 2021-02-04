@@ -27,6 +27,7 @@ public class PageVO {
 	private String search, keyword;		//검색 조건, 검색어
 	
 	private String header;		//말머리
+	private String division;	//분류
 	
 	public void setTotalList(int totalList) {
 		this.totalList = totalList;

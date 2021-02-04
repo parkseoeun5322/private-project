@@ -42,4 +42,9 @@ public class BulpanServiceImpl implements BulpanService {
 		return dao.bulpan_delete(bulpan_no);
 	}
 
+	@Override
+	public BulpanPage bulpan_divList(BulpanPage page) {
+		return dao.bulpan_divList(page);
+	}
+
 }

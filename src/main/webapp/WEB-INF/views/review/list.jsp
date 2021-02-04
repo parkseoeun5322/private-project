@@ -5,32 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-	.list-top { width: 1000px; margin: 20px auto 0; }
- 	.list-top > ul { border-bottom: 1px solid #787878; }
- 	.list-top > ul::after { content: ""; display: block; clear: both; }
-	.list-top > ul > li { 
-		float: left; 
-		border: 1px solid #ddd; 
-		border-top: 0; border-bottom: 0;
-		background: #fdfdfd; }
-	.list-top > ul > li:not(:last-child) { border-right: 0; }
-	.list-top > ul > li.on {
-		border: 1px solid #787878;
-		border-bottom: 1px solid #fff;
-		margin: 0 0 -1px 0;
-		background: transparent;
-	}
-	.list-top > ul > li.on > a { color: #000; padding-top: 1px; font-weight: 700; }
-	.list-top > ul > li > a {
-		float: left;
-		border-top: 1px solid #ddd; 
-		display: block;
-		height: 35px; line-height: 35px; 
-		padding: 0 25px; 
-		color: #6b6b6b; font-size: 14px; 
-	} 
-
+<style type="text/css"> 
 </style>
 <script type="text/javascript" charset="utf-8">
 	function go_detail(no) {
@@ -45,12 +20,6 @@
 	}
 
 	$(function() {
-		var $buttons = $(".list-top > ul > li");
-
-		$buttons.on("click", function() {
-			$buttons.removeClass("on");
-			$(this).addClass("on");
-		});
 		
 		$(".table-style-b td a").hover(
 			function() {
@@ -63,16 +32,8 @@
 </script>
 </head>
 <body>
-	<div class="list-top">
-		<ul>
-			<li class="on"><a data-div="" href="">전체</a></li>
-			<li><a data-div="" href="">한드</a></li>
-			<li><a data-div="" href="">미드</a></li>
-			<li><a data-div="" href="">영드</a></li>
-			<li><a data-div="" href="">일드</a></li>
-			<li><a data-div="" href="">중드</a></li>
-			<li><a data-div="" href="">기타</a></li>
-		</ul>
+	<div class="divSet">
+		<jsp:include page="/WEB-INF/views/include/division.jsp"/>
 	</div>
 	<div class="data-list">
 		<table class="table-style-b">
@@ -86,7 +47,7 @@
 			<c:forEach items="${page.list }" var="vo">
 				<tr>
 					<td>${vo.review_rownum }</td>
-					<td>${vo.review_category }</td>
+					<td>${vo.board_category }</td>
 					<td>
 						<a onclick="go_submit('${vo.review_header }')">${vo.review_header }</a>)
 						<a href="javascript:go_detail(${vo.review_no })">${vo.review_title }</a>
@@ -100,7 +61,8 @@
 	<div class="list-bottom">
 		<form action="list.re" method="post" class="form-style-b">
 			<input type="hidden" name="curPage" value="1">
-			<input type="hidden" name="header" value="${page.header }">
+			<input type="hidden" name="header" value="">
+			<input type="hidden" name="division" value="">
 			<input type="hidden" name="review_no">
 			<div>
 				<ul>

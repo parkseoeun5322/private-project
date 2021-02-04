@@ -10,6 +10,7 @@
 	window.onload = function() { 
 		if("${login_info}" == "") location.href = "/deuqoo";
 	}
+ 
 </script>
 </head>
 <body>
@@ -28,6 +29,17 @@
 				</li>
 			</ul>
 			<ul>
+				<li>
+					<select name="bulpan_division" id="selecDiv" title="분류" class="need_div">
+							<option disabled selected>분류</option>
+							<option value="한드">한드</option>
+							<option value="미드">미드</option>
+							<option value="영드">영드</option>
+							<option value="일드">일드</option>
+							<option value="중드">중드</option>
+							<option value="기타">기타</option>
+					</select>
+				</li>			
 				<li>
 					<input type="text" name="bulpan_title" class="need" title="제목"
 							placeholder="제목" onfocus="this.placeholder=''"

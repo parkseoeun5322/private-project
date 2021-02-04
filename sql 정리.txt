@@ -79,6 +79,9 @@ ALTER TABLE review ADD review_scrapcnt number default 0;
 ALTER TABLE review DROP COLUMN review_content;
 ALTER TABLE review ADD (review_content CLOB); 
 
+--컬럼명 변경
+ALTER TABLE review RENAME COLUMN review_category TO board_category;
+
 COMMIT;
 
 -------------------------------- Push 테이블

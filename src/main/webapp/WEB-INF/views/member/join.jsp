@@ -55,7 +55,6 @@
 	
 	 .btnSet {
 	 	width: 400px;
-	 	height: 55px;
 	 	margin: 0 auto;
 	 	overflow: hidden;
 	 }
@@ -63,18 +62,17 @@
 	 #btn-submit, #btn-reset {
 	 	width: 48.5%;
 		display: block; 
-		line-height: 50px;
+		line-height: 35px;
 		font-weight: 70;
 		cursor: pointer;
 		float: left;
 	 }
 	 
-	#btn-submit { background-color: #787878; color: #ffffff; font-weight: 900; margin-right: 5px; height: 53px; }
+	#btn-submit { background-color: #787878; color: #ffffff; font-weight: 900; margin-right: 5px; }
 	
 	#btn-reset { 
 		background-color: #ffffff; 
 		color: #787878;
-		height: 50px; 
 		font-weight: 600;
 		/* border: 1px solid #000000; */
 		box-shadow: 2px 2px 5px #666666;

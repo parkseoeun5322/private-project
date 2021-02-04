@@ -138,8 +138,8 @@ public class BulpanController {
 
 	// 불판 글 목록 화면 요청
 	@RequestMapping("/list.bu")
-	public String list(Model model, HttpSession session, 
-						String search, String keyword, String header,
+	public String list(Model model, HttpSession session, String search, 
+						String keyword, String header, String division,
 						@RequestParam(defaultValue = "10") int pageList, 
 						@RequestParam(defaultValue = "1") int curPage) {
 		session.setAttribute("category", "bu");
@@ -150,13 +150,33 @@ public class BulpanController {
 		page.setKeyword(keyword);
 		page.setPageList(pageList);
 		page.setHeader(header);
+		page.setDivision(division);
 		
-		if (header == null || header.equals("")) {
-			// 보통 글 목록 화면 요청 시 & 검색 후 글 목록 화면 요청 시
-			model.addAttribute("page", bulService.bulpan_list(page));
-		} else {
+		if (header != null && !header.equals("")) {
 			// 말머리 검색 후 글 목록 화면 요청 시
 			model.addAttribute("page", bulService.bulpan_headerList(page));
+			
+		} else if (division != null && !division.equals("")) {
+			model.addAttribute("page", bulService.bulpan_divList(page));
+			
+			if (division.equals("한드")) {
+				session.setAttribute("division", "ko");
+			} else if (division.equals("미드")) {
+				session.setAttribute("division", "am");
+			} else if (division.equals("영드")) {
+				session.setAttribute("division", "br");
+			} else if (division.equals("일드")) {
+				session.setAttribute("division", "ja");
+			} else if (division.equals("중드")) {
+				session.setAttribute("division", "ch");
+			} else if (division.equals("기타")) {
+				session.setAttribute("division", "et");
+			}
+			
+		} else {
+			// 보통 글 목록 화면 요청 시 & 검색 후 글 목록 화면 요청 시
+			session.setAttribute("division", "to");
+			model.addAttribute("page", bulService.bulpan_list(page));
 		}
 		
 		return "bulpan/list";
