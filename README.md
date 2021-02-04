@@ -5,7 +5,7 @@
 ## Tech stack & Open-source libraries
 * Tool : Eclipse Photon (4.8)
 * Android Studio (3.5.5)
-* Spring Tool Suite3 v.3.9.11
+* Spring Tool Suite3 v.3.9.11(Spring legacy)
 * DataBase : Oracle Database 11g Express Edition
 ```
 ```
