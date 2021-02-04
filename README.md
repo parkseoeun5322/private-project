@@ -66,7 +66,7 @@
 ```
 ```
 #### ② 채팅방 개설(불판 글쓰기) 페이지
-![불판 글쓰기 페이지](https://user-images.githubusercontent.com/78471888/106893112-69707180-6730-11eb-8906-517f1033eaea.png)
+![불판 글쓰기 페이지](https://user-images.githubusercontent.com/78471888/106920682-afd4c900-674e-11eb-9939-58dff1b0dc92.png)
 * 다른 게시판과 달리 제목과 말머리, 드라마 분류(한드, 미드, ...)만 입력받음
 ```
 ```
