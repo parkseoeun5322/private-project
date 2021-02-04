@@ -1,1 +1,1 @@
-# Deuqoo
+# Deuqoo(진행중)
