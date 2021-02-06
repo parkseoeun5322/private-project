@@ -25,4 +25,6 @@ public interface ReviewService {
 	boolean review_scrap_cancel(ScrapVO vo);			//리뷰 글 스크랩 취소
 	
 	int review_delete(int review_no);					//리뷰 글 삭제
+	
+	int review_comment_cnt(ReviewVO vo);				//게시글 마다 댓글 수			
 }

@@ -15,8 +15,9 @@ public class ChatVO implements Serializable {
 	private int chatting_no;
 	private	String chatting_writer;
 	private	String chatting_content;
-	private Date chatting_time;		//yy/MM/dd HH/mm/ss
+	private Date chatting_time;		// yy/MM/dd HH/mm/ss
 	private String chatting_date;	// DB에 X : yyMM/dd
 	private int chatting_roomNo;
 	private int chatting_nickName;
+	private String chatting_title;	// DB에 X
 }

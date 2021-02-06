@@ -146,3 +146,13 @@ create table board_comment (
     comment_writetime varchar2(10),
     comment_category varchar2(20)
 );
+
+CREATE SEQUENCE seq_comment START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_comment
+    BEFORE INSERT on board_comment
+    FOR EACH ROW
+BEGIN
+    SELECT seq_comment.nextval into :new.comment_no from dual;
+END;
+/

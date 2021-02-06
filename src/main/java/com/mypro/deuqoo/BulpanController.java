@@ -57,10 +57,8 @@ public class BulpanController {
 		// 닉네임 설정
 		if(chatService.countWriter(vo) <= 0) {
 			vo.setChatting_nickName(chatService.selectMaxNickname(vo) + 1);
-			System.out.println("드덕 " + vo.getChatting_nickName());
 		} else {
 			vo.setChatting_nickName(chatService.selectNickname(vo));
-			System.out.println("드덕 " + vo.getChatting_nickName());
 		}
 
 		// 난수 생성하여 고유 아이디 설정
@@ -78,11 +76,14 @@ public class BulpanController {
 		 
 	// 채팅창으로 입장
 	@RequestMapping("/chat.bu")
-	public ModelAndView enterChat(@RequestParam int chatting_roomNo, ModelAndView mav, HttpSession session) {
+	public ModelAndView enterChat(@RequestParam int chatting_roomNo,
+								  @RequestParam String chatting_title,
+								  ModelAndView mav, HttpSession session) {
 		bulService.bulpan_read(chatting_roomNo);	//조회수 증가
 		
 		List<ChatVO> firstList = chatService.selectFirstChatList(chatting_roomNo);
 		mav.addObject("chatting_roomNo", chatting_roomNo);
+		mav.addObject("chatting_title", chatting_title);
 		mav.addObject("firstList", firstList);
 		mav.setViewName("bulpan/chat/chatting");
 

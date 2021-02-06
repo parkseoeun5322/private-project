@@ -22,11 +22,12 @@
 	<!-- 채팅 입력 시 채팅 닉네임 설정 -->
 	<select id="selectNickname" resultType="Integer">
 		select chatting_nickName from chatting 
-		where chatting_writer = #{chatting_writer}
+		where chatting_writer = #{chatting_writer} and chatting_roomNo = #{chatting_roomNo}
 		group by chatting_nickname
 	</select>
 	<select id="selectMaxNickname" resultType="Integer">
-		select nvl(max(chatting_nickName), 0) from chatting
+		select nvl(max(chatting_nickName), 0) from chatting 
+		where chatting_roomNo = #{chatting_roomNo}
 	</select>
 	<select id="countWriter" resultType="Integer">
 		select count(*) from 
@@ -45,9 +46,9 @@
 	</select>
 
 	<select id="selectFirstChatList" resultType="bulpan.ChatVO">	
-		select c.*, to_char(chatting_time, 'yy/mm/dd') chatting_date from
-			(select * from chatting
-			where chatting_roomNo = #{chatting_roomNo}) c
+		select c.*, to_char(chatting_time, 'yy/mm/dd') chatting_date
+		from (select * from chatting
+			  where chatting_roomNo = #{chatting_roomNo}) c
 		order by chatting_no	
 	</select>
 	

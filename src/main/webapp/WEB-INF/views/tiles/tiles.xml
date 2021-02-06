@@ -20,12 +20,13 @@
 	 	<put-attribute name="content" value="/WEB-INF/views/{1}.jsp"/>
 	 </definition>
 	 
-	 <!-- tiles 적용 제외 -->
+	 <!-- tiles 적용 제외
 	 <definition name="empty" template="/WEB-INF/views/empty.jsp">
         <put-attribute name="content2" value=""/>  
     </definition>
     <definition name="bulpan/chat/*" extends="empty">
 		<put-attribute name="content2" value="/WEB-INF/views/bulpan/chat/{1}.jsp"></put-attribute>
     </definition>
+	 -->
     
 </tiles-definitions>       

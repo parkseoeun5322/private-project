@@ -105,5 +105,10 @@ public class ReviewDAO implements ReviewService {
 		return page;
 	}
 
+	@Override
+	public int review_comment_cnt(ReviewVO vo) {
+		return sql.selectOne("review.mapper.comment_cnt", vo);
+	}
+
 
 }

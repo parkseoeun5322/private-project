@@ -1,5 +1,7 @@
 package com.mypro.deuqoo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +174,8 @@ public class ReviewController {
 						@RequestParam(defaultValue = "10") int pageList, 
 						@RequestParam(defaultValue = "1") int curPage) {
 		session.setAttribute("category", "re");
+		
+		ReviewPage list;
 
 		// DB에서 글 정보를 조회해와 목록화면에 출력
 		page.setCurPage(curPage);
@@ -183,10 +187,10 @@ public class ReviewController {
 
 		if (header != null && !header.equals("")) {
 			// 말머리 검색 후 글 목록 화면 요청 시
-			model.addAttribute("page", service.review_headerList(page));
+			list = service.review_headerList(page);
 			
 		} else if (division != null && !division.equals("")) {
-			model.addAttribute("page", service.review_divList(page));
+			list = service.review_divList(page);
 			
 			if (division.equals("한드")) {
 				session.setAttribute("division", "ko");
@@ -205,7 +209,15 @@ public class ReviewController {
 		} else {
 			// 보통 글 목록 화면 요청 시 & 검색 후 글 목록 화면 요청 시
 			session.setAttribute("division", "to");
-			model.addAttribute("page", service.review_list(page));
+			list = service.review_list(page);
+		}
+		
+		model.addAttribute("page", list);
+		
+		// 댓글 수 구하기
+		List<ReviewVO> vo_list = list.getList();
+		for (ReviewVO vo: vo_list) {
+			vo.setReview_commentcnt(service.review_comment_cnt(vo));
 		}
 
 		return "review/list";

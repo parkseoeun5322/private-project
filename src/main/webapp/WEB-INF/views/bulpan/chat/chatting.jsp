@@ -6,9 +6,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>채팅</title>
+<link rel="stylesheet" type="text/css" href="css/basic.css">
+<link rel="stylesheet" type="text/css" href="css/common.css?v=<%=new java.util.Date().getTime()%>">
+<title>${chatting_title }</title>
  <!-- moment()함수 -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="dist/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <style type="text/css">

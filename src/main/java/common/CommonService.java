@@ -59,4 +59,5 @@ public class CommonService {
 			System.out.println(e.getMessage());
 		}
 	} // emailAuthSend()
+	
 }

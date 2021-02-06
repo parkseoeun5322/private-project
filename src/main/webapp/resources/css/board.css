@@ -99,3 +99,8 @@
 	border-radius: 3px;
 	margin: -5px 5px 0 0;
 }
+
+/* 댓글 관련 CSS */
+.comment_wrap { width: 100%; border: 1px solid #ddd; padding: 25px 0; }
+.comment_wrap textarea { width: 950px; }
+.comment_wrap > div > a { width: 60px; margin: 10px 0 0 918px; }

@@ -93,7 +93,9 @@
 					<td>${vo.board_category }</td>
 					<td>
 						<a onclick="go_submit('${vo.bulpan_header }')">${vo.bulpan_header }</a>)
-						<a href="javascript:void(window.open('chat.bu?chatting_roomNo=${vo.bulpan_no }', '', 'width=400'))">${vo.bulpan_title }</a>
+						<a href="javascript:void(window.open('chat.bu?chatting_roomNo=${vo.bulpan_no }&chatting_title=${vo.bulpan_title }', '', 'width=400'))">
+							${vo.bulpan_title }
+						</a>
 						<c:if test="${login_info.member_id eq vo.bulpan_writer}">
 							<a class="fr" id="deleteBtn" href="javascript:go_delete(${vo.bulpan_no })">삭제</a>
 							<a class="fr" id="resetBtn" href="javascript:go_modify(${vo.bulpan_no })">수정</a>

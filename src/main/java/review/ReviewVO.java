@@ -22,5 +22,6 @@ public class ReviewVO {
 	private String review_filepath;
 	private int review_scrapcnt;
 	
-	private int review_rownum;	//DB X
+	private int review_rownum;		//DB X
+	private int review_commentcnt;	//DB X
 }

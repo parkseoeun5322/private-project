@@ -50,7 +50,8 @@
 					<td>${vo.board_category }</td>
 					<td>
 						<a onclick="go_submit('${vo.review_header }')">${vo.review_header }</a>)
-						<a href="javascript:go_detail(${vo.review_no })">${vo.review_title }</a>
+						<a class="mr10" href="javascript:go_detail(${vo.review_no })">${vo.review_title }</a>
+						<span style="font-weight: 900;">${vo.review_commentcnt }</span>
 					</td>
 					<td>${vo.review_writedate }</td>
 					<td>${vo.review_readcnt }</td>

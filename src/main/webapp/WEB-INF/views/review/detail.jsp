@@ -45,9 +45,6 @@
 	.detail_style li:nth-child(4) div span:nth-child(1) { margin: 0 10px 0 0; }
 	.detail_style li:nth-child(4) div span:nth-child(2) b { margin: 0 0 0 5px; }
 	
-	.comment_wrap { width: 100%; border: 1px solid #ddd; padding: 25px 0; }
-	.comment_wrap textarea { width: 950px; }
-	.comment_wrap a { width: 60px; margin: 10px 0 0 918px; }
 </style>
 <script type="text/javascript">
 	//추천하기 버튼 클릭 시
@@ -61,10 +58,6 @@
 							push_category: "${vo.board_category}" },
 					success:function(data) {
 						if(data) {
-							/*
-							$thumbsUp.children().removeClass();
-							$thumbsUp.children().addClass("fas fa-thumbs-up");
-							*/
 							window.location.reload();
 						} else {
 							alert("관리자에게 문의하세요.");
@@ -89,10 +82,6 @@
 						console.log(data);
 						if(data) {
 							alert("추천이 취소되었습니다.");
-							/*
-							$thumbsUp.children().removeClass();
-							$thumbsUp.children().addClass("far fa-thumbs-up");
-							*/
 							window.location.reload();
 						} else {
 							alert("관리자에게 문의하세요.");
@@ -169,7 +158,7 @@
 				<div>
 					<span>조회수<b>${vo.review_readcnt }</b></span>
 					<span id="pushCnt">추천수<b>${vo.review_pushcnt }</b></span>
-					<span>댓글<b>2</b></span>
+					<span>댓글<b>${vo.review_commentcnt }</b></span>
 				</div>
 			</li>
 			<li>${vo.review_content }</li>
@@ -205,26 +194,26 @@
 			<input type="hidden" name="pageList" value="${page.pageList }" />
 		</form>
 		<div class="comment_wrap">
+			<div id="comment_list" class="left">
+				
+			</div>
 			<div id="comment_regist">
 				<textarea name="comment_content" id="comment"></textarea>
 				<a onclick="comment_regist()" class="btn-fill" id="commentBtn">등록</a>
 			</div>
-			<div id="comment_list" class="left">
-				
-			</div>
 		</div> <!-- .comment_wrap -->
 	</div> <!-- .detail_style -->
-	
 	
 	<!-- SmartEditor 에서 필요한 javascript 로딩  -->
 	<script src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>	
 	<script type="text/javascript">
-		/*
+	
 		comment_list();
 	
 		function comment_list() {
 			$.ajax({
 				url: "board/comment/${vo.review_no}",
+				data: { board_writer: "${vo.review_writer}"},	//글 작성자 정보를 보내 댓글 목록에 표시
 				success: function(data) {
 					$("#comment_list").html(data);
 					
@@ -235,7 +224,7 @@
 			});
 			
 		} //comment_list()
-		*/
+
 		// 에디터 -------------------------------------------------
 		
 		var oEditors = [];
@@ -255,7 +244,29 @@
 				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음) 
 				bUseModeChanger : false 
 			} 
-		}); 
+		});
+
+		function comment_regist() {
+			if(confirm("댓글을 등록하시겠습니까?")) { 
+				$.ajax({
+					url: "board/comment/regist",
+					data: { comment_content: oEditors.getById["comment"].getIR(), 
+							//comment_content: $("#comment").val(), 
+							// → 스마트 에디터로 인해 textarea 값이 바로 출력되지 않고 한번 reload된 후에 출력됨
+							comment_bno:${vo.review_no},
+							comment_category: "${vo.board_category}" },
+					success: function(response) {
+						if(response == 1) {
+							alert("댓글이 등록되었습니다.");
+							$("#comment").val("");	//입력한 댓글 초기화
+							comment_list();
+						}
+					}, error: function(req, text) {
+						alert(text + ":" + req.status);
+					}
+				});
+			}
+		} //comment_regist()
 		
 		$(function() {
 			$("#commentBtn").click(function() { 
@@ -270,26 +281,11 @@
 					   oEditors.getById["comment"].exec("FOCUS"); //포커싱 
 					   return; 
 				}
-				
-				if(confirm("글을 저장하시겠습니까?")) { 
-					/*
-					$.ajax({
-						url: "board/comment/regist",
-						data: { comment_content:$("#comment").val(), comment_bn0:${vo.review_no} },
-						success: function(response) {
-							if(response == 1) {
-								alert("댓글이 등록되었습니다.");
-								$("#comment").val("");	//입력한 댓글 초기화
-								comment_list();
-							}
-						}, error: function(req, text) {
-							alert(text + ":" + req.status);
-						}
-					});
-					*/
-				}
+
 			}); 
 		});
+
+		
 	</script>
 </body>
 </html>

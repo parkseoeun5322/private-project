@@ -80,4 +80,9 @@ public class ReviewServiceImpl implements ReviewService {
 		return dao.review_divList(page);
 	}
 
+	@Override
+	public int review_comment_cnt(ReviewVO vo) {
+		return dao.review_comment_cnt(vo);
+	}
+
 }
