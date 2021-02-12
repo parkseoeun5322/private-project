@@ -5,24 +5,25 @@
 	var need = true;
 			
 	$(".need").each(function() {
-		if( $(this).val() == "" ) {
-			alert($(this).attr("title") + "을 입력하세요");
+		if( $(this).val() == "") {
+			alert($(this).attr("title") + "을/를 입력하세요");
 			$(this).focus();
 			need = false;
-			
+			if(!need) return;
 			return need;
 		}
 	});
 	
-	$(".need_div option").each(function() {
-		if ( this.value == "" ) {
-			alert("분류를 입력하세요");
+	$(".selecDiv").each(function() {
+		var text = $(this).find('option:selected').val();
+		
+		if (text == "분류") { 
+			alert("분류를 선택해주세요"); 
 			need = false;
-			
-			return need;
+			return need; 
 		}
 	});
-
+	
 	return need;
 	
 } //necessary()

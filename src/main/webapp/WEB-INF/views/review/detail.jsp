@@ -193,15 +193,17 @@
 			<input type="hidden" name="keyword" value="${page.keyword }" />
 			<input type="hidden" name="pageList" value="${page.pageList }" />
 		</form>
-		<div class="comment_wrap">
-			<div id="comment_list" class="left">
-				
-			</div>
-			<div id="comment_regist">
-				<textarea name="comment_content" id="comment"></textarea>
-				<a onclick="comment_regist()" class="btn-fill" id="commentBtn">등록</a>
-			</div>
-		</div> <!-- .comment_wrap -->
+			<c:if test="${login_info ne null }">
+				<div class="comment_wrap">
+					<div id="comment_list" class="left">
+						
+					</div>
+					<div id="comment_regist">
+						<textarea name="comment_content" id="comment"></textarea>
+						<a onclick="comment_regist()" class="btn-fill" id="commentBtn">등록</a>
+					</div>
+				</div> <!-- .comment_wrap -->
+			</c:if>
 	</div> <!-- .detail_style -->
 	
 	<!-- SmartEditor 에서 필요한 javascript 로딩  -->
@@ -227,10 +229,10 @@
 
 		// 에디터 -------------------------------------------------
 		
-		var oEditors = [];
+		var oEditors1 = [];
 		
 		nhn.husky.EZCreator.createInIFrame({ 
-			oAppRef : oEditors, 
+			oAppRef : oEditors1, 
 			elPlaceHolder : "comment", 
 			//저는 textarea의 id와 똑같이 적어줬습니다. 
 			sSkinURI: "smarteditor/SmartEditor2Skin_C.html",
@@ -247,10 +249,23 @@
 		});
 
 		function comment_regist() {
-			if(confirm("댓글을 등록하시겠습니까?")) { 
+			var content = oEditors1.getById["comment"].getIR();
+
+			// 공백 제거 유효성 검사
+			var text = content.replace(/[<][^>]*[>]/gi, "");
+			text = text.replace(/&nbsp;/gi, "");
+			text = text.trim();
+
+			if (text == "") { 
+				alert("댓글을 작성해주세요."); 
+				oEditors1.getById["comment"].exec("FOCUS"); //포커싱 
+				return; 
+			}
+			
+			if(confirm("댓글을 등록하시겠습니까?")) {
 				$.ajax({
 					url: "board/comment/regist",
-					data: { comment_content: oEditors.getById["comment"].getIR(), 
+					data: { comment_content: content, 
 							//comment_content: $("#comment").val(), 
 							// → 스마트 에디터로 인해 textarea 값이 바로 출력되지 않고 한번 reload된 후에 출력됨
 							comment_bno:${vo.review_no},
@@ -258,33 +273,19 @@
 					success: function(response) {
 						if(response == 1) {
 							alert("댓글이 등록되었습니다.");
-							$("#comment").val("");	//입력한 댓글 초기화
+							oEditors1.getById["comment"].exec("SET_IR", ['']);
+							//$("#comment").val("");	//입력한 댓글 초기화
 							comment_list();
+						} else if(response == 0) {
+							alert("로그아웃되었습니다.")
+							location.href = "/deuqoo/login_view";
 						}
 					}, error: function(req, text) {
-						alert(text + ":" + req.status);
+						alert("관리자에게 문의하세요");
 					}
 				});
 			}
 		} //comment_regist()
-		
-		$(function() {
-			$("#commentBtn").click(function() { 
-				oEditors.getById["comment"].exec("UPDATE_CONTENTS_FIELD", []); 
-
-				var content = document.getElementById("comment").value;
-				 
-				if(content == "" || content == null || content == '&nbsp;' || 
-				   content == '<br>' || content == '<br/>' || 
-				   content == '<p>&nbsp;</p>') { 
-					   alert("본문을 작성해주세요."); 
-					   oEditors.getById["comment"].exec("FOCUS"); //포커싱 
-					   return; 
-				}
-
-			}); 
-		});
-
 		
 	</script>
 </body>

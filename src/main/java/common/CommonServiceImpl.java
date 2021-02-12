@@ -39,4 +39,9 @@ public class CommonServiceImpl implements CommonServiceIF {
 		return dao.comment_update(vo);
 	}
 
+	@Override
+	public int board_reply_regist(BoardCommentVO vo) {
+		return dao.board_reply_regist(vo);
+	}
+
 }

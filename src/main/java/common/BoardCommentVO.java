@@ -15,4 +15,7 @@ public class BoardCommentVO {
 	private Date comment_writedate;
 	private String comment_category;
 	private int comment_nickname;
+	private int comment_root;
+	private int comment_step;
+	private String comment_reply;
 }

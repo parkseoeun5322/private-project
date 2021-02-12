@@ -156,3 +156,9 @@ BEGIN
     SELECT seq_comment.nextval into :new.comment_no from dual;
 END;
 /
+
+ALTER TABLE board_comment ADD comment_root number;
+ALTER TABLE board_comment ADD comment_step number default 0;
+ALTER TABLE board_comment ADD comment_reply varchar2(1) default 'N';
+
+commit;

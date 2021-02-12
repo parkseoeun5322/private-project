@@ -29,7 +29,7 @@
 			</ul>
 			<ul>
 				<li>
-					<select name="review_division" id="selecDiv" title="분류">
+					<select name="review_division" class="selecDiv" title="분류">
 							<option disabled selected>분류</option>
 							<option value="한드">한드</option>
 							<option value="미드">미드</option>
@@ -52,7 +52,9 @@
 			</ul>
 		</form>
 		<div class="btnSet">
-			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
+<!-- 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a> -->
+<!-- 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { alert('글 등록') }">등록</a> -->
+			<a class="btn-fill" id="saveBtn" onclick="go_submit();">등록</a>
 			<a class="btn-empty" href="list.re">취소</a>
 		</div>
 	</div>
@@ -77,20 +79,29 @@
 				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음) 
 				bUseModeChanger : false 
 			} 
-		}); 
+		});
+
+		function go_submit() {
+			if(necessary ()) {
+				if(editor_check("smarteditor", oEditors)) {
+					alert("글 등록!");
+				}
+			}
+
+		}
 		
 		$(function() {
 			$("#saveBtn").click(function() { 
 				oEditors.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []); 
-				//textarea의 id를 적어줍니다. 
+				
+				/*
 				var selecDiv = $("#selecDiv > option:selected").val();
 				var content = document.getElementById("smartEditor").value;
 				
-				if (selecDiv == "") { 
+				if (selecDiv == "분류") { 
 					alert("분류를 선택해주세요"); 
 					return; 
 				}
-				 
 				if(content == "" || content == null || content == '&nbsp;' || 
 				   content == '<br>' || content == '<br/>' || 
 				   content == '<p>&nbsp;</p>') { 
@@ -102,6 +113,7 @@
 				if(confirm("글을 저장하시겠습니까?")) { 
 					$("form").submit(); 
 				}
+				*/
 			}); 
 		});
 

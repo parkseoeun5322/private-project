@@ -1,23 +1,45 @@
 package com.mypro.deuqoo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import common.BoardCommentVO;
 import common.CommonServiceImpl;
 import member.MemberVO;
+import review.ReviewVO;
 
 @Controller
 public class CommonController {
 	@Autowired CommonServiceImpl service;
 	
-	// 댓글 수정 업데이터
+	//대댓글 DB 저장
+	@ResponseBody @RequestMapping(value= "/board/reply/regist", 
+								  produces = "application/text; charset=utf-8")
+	public String reply_regist(@RequestBody BoardCommentVO vo, HttpSession session) {
+		MemberVO id = (MemberVO) session.getAttribute("login_info");
+		vo.setComment_writer(id.getMember_id());	//작성자를 로그인한 아이디로 저장
+		vo.setComment_reply("Y");
+		
+		// 닉네임 설정
+		if(service.countWriter(vo) <= 0) {
+			vo.setComment_nickname(service.selectMaxNickname(vo) + 1);
+		} else {
+			vo.setComment_nickname(service.selectNickname(vo));
+		}
+		
+		return service.board_reply_regist(vo) > 0 ? "성공" : "실패";
+	}
+	
+	// 댓글 수정 업데이트
 	@RequestMapping("/comment_update")
 	public String update(BoardCommentVO vo, Model model) {
 		String page = "";
@@ -63,7 +85,11 @@ public class CommonController {
 	public int comment_regist(BoardCommentVO vo, HttpSession session) {
 		//화면에서 입력한 정보를 DB에 저장한 후 ajax쪽으로 돌아간다.
 		MemberVO id = (MemberVO) session.getAttribute("login_info");
-		vo.setComment_writer(id.getMember_id());		//작성자를 로그인한 아이디로 저장 
+		if(id != null) {
+			vo.setComment_writer(id.getMember_id());		//작성자를 로그인한 아이디로 저장 
+		} else {
+			return 0;
+		}
 		
 		// 닉네임 설정
 		if(service.countWriter(vo) <= 0) {
