@@ -70,8 +70,8 @@
 					<li>
 						<select name="search" class="w-px80">
 							<option value="all" ${page.search eq 'all' ? 'selected' : '' }>전체</option>
-							<option value="title" ${page.search eq 'title' ? 'selected' : '' }>제목</option>
-							<option value="content" ${page.search eq 'content' ? 'selected' : '' }>내용</option>
+							<option value="review_title" ${page.search eq 'title' ? 'selected' : '' }>제목</option>
+							<option value="review_content" ${page.search eq 'content' ? 'selected' : '' }>내용</option>
 						</select>
 					</li>
 					<li><input type="text" name="keyword" class="w-px200" value="${page.keyword }"></li>

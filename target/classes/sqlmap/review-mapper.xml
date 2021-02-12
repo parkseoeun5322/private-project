@@ -122,7 +122,7 @@
 	 </select>
 	 
 	<sql id="search_where">
-		<if test="search == 'title' or search == 'content'">
+		<if test="search == 'review_title' or search == 'review_content'">
 			where ${search}
 			like '%' || #{keyword} || '%'
 		</if>

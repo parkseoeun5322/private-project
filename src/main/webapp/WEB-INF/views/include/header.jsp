@@ -21,8 +21,8 @@
 	<div class="category pt20">
 		<ul>
 			<li><a href="list.bu" ${category eq 'bu' ? 'class="active"' : '' }>불판</a></li>
-			<li><a href="" id="second-item" ${category eq 'al' ? 'class="active"' : '' }>드라마의 모든 것</a></li>
-			<li><a href="" ${category eq 'tv' ? 'class="active"' : '' }>TV 속 이 상품</a></li>
+			<li><a href="list.dr" id="second-item" ${category eq 'dr' ? 'class="active"' : '' }>드라마의 모든 것</a></li>
+			<li><a href="list.tv" ${category eq 'tv' ? 'class="active"' : '' }>TV 속 이 상품</a></li>
 			<li><a href="list.re" ${category eq 're' ? 'class="active"' : '' }>드라마 리뷰</a></li>
 			<li><a href="" ${category eq 'bl' ? 'class="active"' : '' }>블루레이 모집</a></li>
 			<li>
@@ -32,7 +32,7 @@
 		</ul>
 		<div id="dropdown">
 			<ul>
-				<li><a href="">드라마 정보</a></li>
+				<li><a href="list.dr">드라마 정보</a></li>
 				<li><a href="">자료 게시판</a></li>
 			</ul>
 		</div>
@@ -182,6 +182,7 @@ $(function() {
 		position: absolute;
 		top: 100%; left: 0; right: 0;
 		background-color: #ffffff;
+		z-index: 15;
 		
 		/* 처음에는 드랍다운 메뉴가 화면에 보이지 않도록 설정 */
         display: none; 

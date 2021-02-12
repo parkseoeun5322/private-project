@@ -29,10 +29,8 @@ import member.NaverLoginBO;
 
 @Controller
 public class MemberController {
-	@Autowired
-	private MemberServiceImpl service;
-	@Autowired
-	private CommonService common;
+	@Autowired private MemberServiceImpl service;
+	@Autowired private CommonService common;
 
 	// 네이버 로그인
 	private NaverLoginBO naverLoginBO;
@@ -75,23 +73,21 @@ public class MemberController {
 			} else {
 				System.out.println("토큰 값 그대로");
 			}
+			
+			// 최근 로그인 날짜 업데이터
+			Date currentDate = new Date(System.currentTimeMillis());
+			if (!kakaoVO.getMember_recent_login_date().equals(currentDate)) {
+				kakaoVO.setMember_recent_login_date(currentDate);
+				if (service.update_loginDate(kakaoVO) > 0) {
+					System.out.println("최근 로그인 날짜 업데이트 성공");
+				} else {
+					System.out.println("최근 로그인 날짜 업데이트 실패");
+				}
+			}
 		}
 
 		session.setAttribute("login_info", kakaoVO);
 		
-		// 최근 로그인 날짜 업데이터
-		Date currentDate = new Date(System.currentTimeMillis());
-		
-		if (!kakaoVO.getMember_recent_login_date().equals(currentDate)) {
-			kakaoVO.setMember_recent_login_date(currentDate);
-			
-			if (service.update_loginDate(kakaoVO) > 0) {
-				System.out.println("최근 로그인 날짜 업데이트 성공");
-			} else {
-				System.out.println("최근 로그인 날짜 업데이트 실패");
-			}
-		}
-
 		return result;
 	}
 
@@ -167,7 +163,7 @@ public class MemberController {
 					result = true;
 					System.out.println("vo의 아이디 : " + naverVO.getMember_id());
 					
-					// 최근 로그인 날짜 업데이터
+					// 최근 로그인 날짜 업데이트
 					Date currentDate = new Date(System.currentTimeMillis());
 					
 					if (!naverVO.getMember_recent_login_date().equals(currentDate)) {
