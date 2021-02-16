@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mapper 태그를 사용하기 위한 코드 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shopping.mapper">
+	<!-- 글 삭제 처리 -->
+	<delete id="delete">
+		delete from shopping where shopping_no = #{shopping_no}
+	</delete>
+
+	<!-- TV 속 이 상품 글 수정 -->
+	<update id="update">
+		update shopping set shopping_header = #{shopping_header}, 
+			shopping_division = #{shopping_division},
+			shopping_title = #{shopping_title},
+			shopping_content = #{shopping_content}
+		where shopping_no = #{shopping_no}
+	</update>
+
+	<!-- 스크랩 취소 처리 -->
+	<delete id="scrapDelete">
+		delete from scrap where scrap_no = #{scrap_no}
+	</delete>
+	<update id="scrapCancel">
+		update shopping set shopping_scrapcnt = shopping_scrapcnt - 1 
+		where shopping_no = #{scrap_boardNo}
+	</update>
+
+	<!-- 스크랩 처리 -->
+	<insert id="scrapInsert">
+		insert into scrap(scrap_boardNo, scrap_id, scrap_category, scrap_title)
+		values(#{scrap_boardNo}, #{scrap_id}, #{scrap_category}, #{scrap_title})
+	</insert>
+	<update id="scrap">
+		update shopping set shopping_scrapcnt = shopping_scrapcnt + 1 
+		where shopping_no = #{scrap_boardNo}
+	</update>	
+
+	<!-- 추천 취소 처리 -->
+	<delete id="pushDelete">
+		delete from push where push_no = #{push_no}
+	</delete>
+	<update id="pushCancel">
+		update shopping set shopping_pushcnt = shopping_pushcnt - 1 where shopping_no = #{push_boardNo}
+	</update>
+
+	<!-- 추천 수 증가 처리 -->
+	<insert id="pushInsert">
+		insert into push(push_boardNo, push_id, push_category)
+		values(#{push_boardNo}, #{push_id}, #{push_category})
+	</insert>
+	<update id="push">
+		update shopping set shopping_pushcnt = shopping_pushcnt + 1 
+		where shopping_no = #{push_boardNo}
+	</update>
+
+	<!-- TV 속 이 상품 글 상세 조회 -->
+	<select id="scrapList" resultType="common.ScrapVO">
+		select * from scrap 
+		where scrap_boardNo = #{scrap_boardNo} 
+		and scrap_id = #{scrap_id}
+		and scrap_category = #{scrap_category}		
+	</select>
+	<select id="pushList" resultType="common.PushVO">
+		select * from push 
+		where push_boardNo = #{push_boardNo} 
+		and push_id = #{push_id}
+		and push_category = #{push_category}
+	</select>
+	<select id="detail" resultType="shopping.ShoppingVO">
+        select r.*, 
+        	(select count(*) from board_comment 
+        	where comment_bno = #{shopping_no}
+        	and comment_category = '상품') shopping_commentcnt
+        from shopping r where shopping_no = #{shopping_no}
+	</select>
+
+	<!-- 리뷰 글 조회수 증가 -->
+	<update id="read">
+		update shopping set shopping_readcnt = shopping_readcnt + 1 where shopping_no = #{shopping_no}
+	</update>
+
+	 <!-- TV 속 이 상품 글 저장 -->
+	<insert id="insert">
+		insert into shopping(shopping_title, shopping_content, shopping_header, shopping_writer, shopping_division) 
+		values(#{shopping_title}, #{shopping_content}, #{shopping_header}, #{shopping_writer}, #{shopping_division})
+	</insert>
+	
+	<!-- 댓글 수 -->
+	<select id="comment_cnt" resultType="integer">
+		select count(*) from board_comment 
+		where comment_bno = #{shopping_no} 
+		and comment_category = #{board_category} 
+	</select>
+
+	<!-- 글 분류 처리 -->
+	 <select id="divList" resultType="shopping.ShoppingVO">
+	 	select n.* from
+		 	(select n.*, rownum shopping_rownum from
+			 	(select * from shopping
+			 	where shopping_division = #{division}
+			 	order by shopping_no) n
+			 order by shopping_rownum desc) n
+		where shopping_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="divTotal" resultType="integer">
+	 	select count(*) from shopping
+	 	where shopping_division = #{division}
+	 </select>
+
+	 <!-- 말머리 검색 후 목록 조회 -->
+	 <select id="headerList" resultType="shopping.ShoppingVO">
+	 	select n.* from
+		 	(select n.*, rownum shopping_rownum from
+			 	(select * from shopping
+			 	where shopping_header = #{header}
+			 	order by shopping_no) n
+			 order by shopping_rownum desc) n
+		where shopping_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="headerTotal" resultType="integer">
+	 	select count(*) from shopping
+	 	where shopping_header = #{header}
+	 </select>
+
+	<sql id="search_where">
+		<if test="search == 'shopping_title' or search == 'shopping_content'">
+			where ${search}
+			like '%' || #{keyword} || '%'
+		</if>
+		<if test="search == 'all'">
+			where shopping_title like '%' || #{keyword} || '%'
+			or shopping_content like '%' || #{keyword} || '%'
+		</if>
+	</sql>
+	 
+	 <!-- 각 페이지에 출력할 목록 조회 -->
+	 <select id="list" resultType="shopping.ShoppingVO">
+	 	select n.* from
+		 	(select n.*, rownum shopping_rownum from
+			 	(select * from shopping
+			 	<include refid="search_where"/>
+			 	order by shopping_no) n
+			 order by shopping_rownum desc) n
+		where shopping_rownum between #{beginList} and #{endList}
+	 </select>
+	 
+	 <!-- 페이징 처리를 위한 검색 조건에 해당하는 글 목록 건수 조회 -->
+	 <select id="total" resultType="integer">
+	 	select count(*) from shopping
+	 	<include refid="search_where" />
+	 </select>
+</mapper>

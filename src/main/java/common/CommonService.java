@@ -15,6 +15,43 @@ import member.MemberVO;
 
 @Service
 public class CommonService {
+	// 글 저장 혹은 수정 시 동영상 url 처리
+	public String videoUrl(String content) {
+		String[] video_url = {"https://www.youtube.com/watch?v=", 
+				  			  "https://youtu.be/", 
+				  			  "https://tv.naver.com/v/" };
+		String video_code = "";		//동영상 고유 코드
+		String linkHtml = "";
+		String appendHtml = "";
+		
+		Document document = Jsoup.parse(content);
+		Elements element = document.select("p");
+		for(Element el : element) {
+			linkHtml = "<a href='" + el.text() + "'>" + el.text() + "</a>";
+			
+			if( el.text().contains(video_url[0]) ) {
+				video_code = el.text().substring(el.text().indexOf("=") + 1);
+				appendHtml = "<p><iframe width='560' height='315' src='https://www.youtube.com/embed/" 
+						+ video_code + "' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe></p>";
+				el.text(linkHtml + appendHtml);
+			} else if( el.text().contains(video_url[1]) ) {
+				video_code = el.text().substring(el.text().indexOf("/", 15) + 1);
+				appendHtml = "<p><iframe width='560' height='315' src='https://www.youtube.com/embed/" 
+						+ video_code + "' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe></p>";
+				el.text(linkHtml + appendHtml);
+			} else if( el.text().contains(video_url[2]) ) {
+				video_code = el.text().substring(el.text().indexOf("/", 21) + 1);
+				appendHtml = "<p><iframe src='https://tv.naver.com/embed/"
+						+ video_code + "' frameborder='no' scrolling='no' marginwidth='0'" + 
+								"marginheight='0' WIDTH='544' HEIGHT='306'" + 
+								"allow='autoplay' allowfullscreen></iframe></p>";
+				el.text(linkHtml + appendHtml);
+			}
+		}
+		
+		return element.outerHtml();
+	}
+	
 	// 드라마 정보 크롤링 메소드
 	public void drama_crawling(Model model, String url) {
 		String naverUrl = "https://search.naver.com/search.naver";
