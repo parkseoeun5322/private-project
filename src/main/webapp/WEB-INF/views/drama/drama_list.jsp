@@ -12,9 +12,10 @@
 	.btn_refresh, .relation_box._offer_box,
 	.tab_list, .blind, ._kgs_page,
 	.area_scroll_middle > li:last-child { display: none !important; }
+	
 	.category, .area_text_box { font-size: 18px !important; }
 	.info_txt, ._text, ._count { font-size: 0.7em !important; }
-	
+	.cs_common_module .offer_box { font-size: 0.7em !important; line-height: 1.6rem !important; }
 </style>
 <script type="text/javascript">
 	var naverUrl = "https://search.naver.com/search.naver";

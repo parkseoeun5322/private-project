@@ -8,7 +8,10 @@
 <script type="text/javascript">
 	// 로그아웃 시 메인으로 돌아감
 	window.onload = function() { 
-		if("${login_info}" == "") location.href = "/deuqoo";
+		if("${login_info}" == "") {
+			alert("로그인이 필요한 페이지입니다.");
+			location.href = "/deuqoo";
+		}
 	}
 </script>
 </head>

@@ -6,45 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-	.detail_style { width: 1000px; max-width:1000px; margin: 20px auto 0; font-size: 15px; }
-	.detail_style li { text-align: left; }
-	.detail_style li:nth-child(1) {
-		border-top: 1px solid #787878;
-		border-bottom: 1px solid #787878;
-		padding: 20px 15px;
-	}
-	.detail_style li:nth-child(1)::after { content: ""; display: block; clear: both; }
-	.detail_style li:nth-child(1) div { float: left; }
-	.detail_style li:nth-child(1) div:nth-child(1) { 
-		font-size: 13px; color: #787878; font-weight: 800; 
-		padding: 0 25px 0 0; line-height: 15px;
-	}
-	.detail_style li:nth-child(1) div:nth-child(2) { width: 844px; }
-	.detail_style li:nth-child(1) div:nth-child(2) a { font-weight: 900; margin: 0 10px 0 0; font-size: 14px; }
-	.detail_style li:nth-child(1) div:nth-child(3) { font-size: 15px; color: #787878; }
-	
-	.detail_style li:nth-child(2) { border-bottom: 1px solid #ddd; padding: 15px; color: #787878; }
-	.detail_style li:nth-child(2)::after { content: ""; display: block; clear: both; }
-	.detail_style li:nth-child(2) div { float: right; }
-	.detail_style li:nth-child(2) span:not(:last-child) { margin: 0 15px 0 0; }
-	.detail_style li:nth-child(2) b { margin: 0 0 0 5px; }
-	.detail_style li:nth-child(3) { padding: 30px 15px; }
-	.detail_style li:nth-child(4) { border-top: 1px solid #ddd; padding: 15px; }
-	.detail_style li:nth-child(4)::after { content: ""; display: block; clear: both; }
-	.detail_style li:nth-child(4) div { border: 1px solid #000; padding: 10px; }
-	.detail_style li:nth-child(4) div:nth-child(2) { height: 38px; }
-	
-	.detail_style li:nth-child(4) div:nth-child(3) { background-color: #fff; color: #000; }
-	.detail_style li:nth-child(4) div:nth-child(4) { background-color: #000; color: #fff; }
-	
-	.detail_style li:nth-child(4) div:nth-child(3) a,
-	.detail_style li:nth-child(4) div:nth-child(4) a { display: block; line-height: 16.5px; padding: 0 10px; border-right: 0; }
-	
-	.detail_style li:nth-child(4) div svg { margin: 0 5px 0 0; }
-	.detail_style li:nth-child(4) div span:nth-child(1) { margin: 0 10px 0 0; }
-	.detail_style li:nth-child(4) div span:nth-child(2) b { margin: 0 0 0 5px; }
-	
+<style type="text/css">	
 </style>
 <script type="text/javascript">
 	//추천하기 버튼 클릭 시
@@ -77,7 +39,8 @@
 				$.ajax({
 					url: "push_cancel",
 					data: { push_boardNo: ${vo.review_no}, 
-							push_no: "${push.push_no}" },
+							push_no: "${push.push_no}",
+							push_category: "${vo.board_category}" },
 					success:function(data) {
 						console.log(data);
 						if(data) {
@@ -124,7 +87,8 @@
 				$.ajax({
 					url: "scrap_cancel",
 					data: { scrap_boardNo: ${vo.review_no}, 
-							scrap_no: "${scrap.scrap_no}" },
+							scrap_no: "${scrap.scrap_no}",
+							scrap_category: "${vo.board_category}" },
 					success:function(data) {
 						console.log(data);
 						if(data) {

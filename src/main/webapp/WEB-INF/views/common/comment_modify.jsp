@@ -5,9 +5,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+	form { width: 1000px; margin: 0 auto; }
+	.comment_wrap { background-color: #f2f2f2; }
+	.title {
+		width: 1000px;
+	    margin: 30px auto; padding: 20px 0;
+    	font-size: 20px; font-weight: 900;
+    	border-top: 2px solid #000;
+    	border-bottom: 2px solid #000;
+    	background-color: #f7f7f7;
+	}
+</style>
 </head>
 <body>
-	<h3>댓글 수정</h3>
+	<div class="title">댓글 수정</div>
 	<form action="comment_update" method="post">
 		<input type="hidden" name="comment_no" value="${comment_no }">
 		<input type="hidden" name="comment_bno" value="${comment_bno }">
@@ -18,8 +30,10 @@
 				<textarea name="comment_content" id="comment">${comment_content }</textarea>
 			</div>
 			<div>
-				<a class="btn-fill" style="display: inline;" onclick="go_update();">등록</a>
-				<a class="btn-empty">돌아가기</a>
+				<div style="padding: 35px 0 10px 0;">
+					<a class="btn-fill" style="display: inline;" onclick="go_update();">등&nbsp;&nbsp;&nbsp;록</a>
+					<a class="btn-empty">돌아가기</a>
+				</div>
 			</div>
 		</div> <!-- .comment_wrap -->
 	</form>

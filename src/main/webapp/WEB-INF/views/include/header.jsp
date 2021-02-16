@@ -33,7 +33,7 @@
 		<div id="dropdown">
 			<ul>
 				<li><a href="list.dr">드라마 정보</a></li>
-				<li><a href="">자료 게시판</a></li>
+				<li><a href="list.info">자료 게시판</a></li>
 			</ul>
 		</div>
 	</div>

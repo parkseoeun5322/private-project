@@ -6232,6 +6232,7 @@ html.fzoom {
 	font-size: 9.6px
 }
 
+/*
 body {
 	line-height: 1.6rem;
 	-webkit-text-size-adjust: none;
@@ -6247,6 +6248,7 @@ body, input, select, textarea {
 	font-size: 1.3rem;
 	color: #000
 }
+*/
 
 address, button, dd, div, dl, dt, em, fieldset, form, h1, h2, h3, h4,
 	iframe, li, object, ol, p, ul {
@@ -6311,10 +6313,6 @@ button {
 	z-index: 4300 !important
 }
 
-a {
-	color: #0c43b7;
-	text-decoration: none
-}
 
 a.link:hover, a.other_link:hover, a.item:hover {
 	text-decoration: underline

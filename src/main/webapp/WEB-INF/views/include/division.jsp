@@ -35,6 +35,12 @@
 			<c:if test="${category eq 're' }">
 				<a data-div="" href="list.re">전체</a>
 			</c:if>
+			<c:if test="${category eq 'tv' }">
+				<a data-div="" href="list.tv">전체</a>
+			</c:if>
+			<c:if test="${category eq 'dr' }">
+				<a data-div="" href="list.info">전체</a>
+			</c:if>
 		</li>
 		<li ${division eq 'ko' ? 'class="on"' : '' }><a onclick="go_div('한드')" >한드</a></li>
 		<li ${division eq 'am' ? 'class="on"' : '' }><a onclick="go_div('미드')">미드</a></li>

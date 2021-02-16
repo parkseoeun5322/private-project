@@ -16,9 +16,9 @@ public class CommonDAO implements CommonServiceIF {
 	}
 
 	@Override
-	public List<BoardCommentVO> board_comment_list(int comment_bno) {
-		sql.update("common.mapper.comment_rootUpdate", comment_bno);
-		return sql.selectList("common.mapper.comment_list", comment_bno);
+	public List<BoardCommentVO> board_comment_list(BoardCommentVO vo) {
+		sql.update("common.mapper.comment_rootUpdate", vo);
+		return sql.selectList("common.mapper.comment_list", vo);
 	}
 
 	@Override

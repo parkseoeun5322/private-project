@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import bulpan.BulpanPage;
-import bulpan.BulpanVO;
 import common.CommonService;
 import common.PushVO;
 import common.ScrapVO;
@@ -27,7 +25,7 @@ public class ReviewController {
 	@Autowired ReviewPage page;
 	@Autowired CommonService common;
 	
-	//방명록 삭제처리 요청
+	//글 삭제처리 요청
 	@RequestMapping("/delete.re")
 	public String delete(int review_no, Model model) {
 		//선택한 방명록 글을 DB에서 삭제한 후 목록화면으로 연결
@@ -36,34 +34,6 @@ public class ReviewController {
 		model.addAttribute("url", "list.re");
 		
 		return "review/redirect";
-	}
-	
-	//스크랩 취소
-	@ResponseBody
-	@RequestMapping("/scrap_cancel")
-	public boolean scrap_cancel(int scrap_boardNo, String scrap_no) {
-		ScrapVO vo = new ScrapVO();
-		vo.setScrap_no(Integer.parseInt(scrap_no));
-		vo.setScrap_boardNo(scrap_boardNo);
-		
-		//boolean result = false;
-		//result = service.review_push_cancel(vo);
-		
-		return service.review_scrap_cancel(vo);
-	}	
-	
-	// 해당 글 스크랩
-	@ResponseBody
-	@RequestMapping("/scrap")
-	public boolean scrap(int scrap_boardNo, String scrap_category, 
-						 String scrap_title, HttpSession session) {
-		ScrapVO vo = new ScrapVO();
-		vo.setScrap_boardNo(scrap_boardNo);
-		vo.setScrap_id( ((MemberVO) session.getAttribute("login_info")).getMember_id() );
-		vo.setScrap_category(scrap_category);
-		vo.setScrap_title(scrap_title);
-		
-		return service.review_scrap(vo);
 	}
 	
 	//리뷰 글 변경사항 수정 요청
@@ -91,34 +61,6 @@ public class ReviewController {
 		model.addAttribute("vo", service.review_detail(review_no));
 		
 		return "review/modify";
-	}
-	
-	// 글 추천 취소
-	@ResponseBody
-	@RequestMapping("/push_cancel")
-	public boolean push_cancel(int push_boardNo, String push_no) {
-		System.out.println("review_no : " + push_boardNo + ", push_no : " + push_no);
-		PushVO vo = new PushVO();
-		vo.setPush_no(Integer.parseInt(push_no));
-		vo.setPush_boardNo(push_boardNo);
-		
-		//boolean result = false;
-		//result = service.review_push_cancel(vo);
-		
-		return service.review_push_cancel(vo);
-	}
-	
-	
-	// 글 추천 수 증가
-	@ResponseBody
-	@RequestMapping("/push")
-	public boolean push(int push_no, String push_category, HttpSession session) {
-		PushVO vo = new PushVO();
-		vo.setPush_boardNo(push_no);
-		vo.setPush_id( ((MemberVO) session.getAttribute("login_info")).getMember_id() );
-		vo.setPush_category(push_category);
-		
-		return service.review_push(vo);
 	}
 	
 	// 리뷰 글 상세정보 조회

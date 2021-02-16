@@ -24,12 +24,15 @@
 	<!-- 닉네임 설정 -->
 	<select id="countWriter" resultType="Integer">
 		select count(*) from 
-		(select * from board_comment where comment_bno = #{comment_bno}) 
+			(select * from board_comment 
+			where comment_bno = #{comment_bno}
+			and comment_category = #{comment_category}) 
 		where comment_writer = #{comment_writer}
 	</select>
 	<select id="selectMaxNickname" resultType="Integer">
 		select nvl(max(comment_nickName), 0) from board_comment 
-		where comment_bno = #{comment_bno}
+		where comment_bno = #{comment_bno} 
+		and comment_category = #{comment_category}
 	</select>
 	<select id="selectNickname" resultType="Integer">
 		select comment_nickName from board_comment 
@@ -50,7 +53,7 @@
 		select c.*,
 			to_char(comment_writedate, 'yyyy-mm-dd hh24:mi:ss') comment_writedate
 		from board_comment c 
-		where comment_bno = #{comment_bno} 
+		where comment_bno = #{comment_bno} and comment_category = #{comment_category}
 		order by comment_root asc, comment_step asc
 	</select>
 	

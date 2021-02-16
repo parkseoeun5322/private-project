@@ -9,9 +9,8 @@
 			alert($(this).attr("title") + "을/를 입력하세요");
 			$(this).focus();
 			need = false;
-			if(!need) return;
-			return need;
 		}
+		return need;
 	});
 	
 	$(".selecDiv").each(function() {

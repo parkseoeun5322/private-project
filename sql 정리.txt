@@ -104,7 +104,14 @@ BEGIN
 END;
 /
 
-ALTER TABLE push ADD push_category varchar2(20) not null;
+ALTER TABLE push ADD push_category varchar2(20) not null;	//컬럼 추가
+
+ALTER TABLE push ADD CONSTRAINT push_boardNo_s_fk FOREIGN KEY(push_boardNo) 
+REFERENCES shopping(shopping_no)  ON DELETE CASCADE;			//제약조건 추가(shopping)
+
+ALTER TABLE push DROP CONSTRAINT push_boardNo_r_fk;		//제약조건 제거
+ALTER TABLE push DROP CONSTRAINT push_boardNo_s_fk;		//제약조건 제거
+// 외래키 제약조건을 두개 이상 걸어줄 경우, insert 시, 두개 이상의 제약조건이 모두 충족되어야만(교집합) insert가 가능하다.
 
 commit;
 
@@ -130,6 +137,12 @@ BEGIN
     SELECT seq_scrap.nextval into :new.scrap_no from dual;
 END;
 /
+
+ALTER TABLE scrap ADD CONSTRAINT scrap_boardNo_s_fk FOREIGN KEY(scrap_boardNo) 
+REFERENCES shopping(shopping_no) ON DELETE CASCADE;		//제약조건 추가(scrap)
+
+ALTER TABLE scrap DROP CONSTRAINT scrap_boardNo_r_fk;	//제약조건 제거
+ALTER TABLE scrap DROP CONSTRAINT scrap_boardNo_s_fk;	//제약조건 제거
 
 commit;
 
@@ -160,5 +173,68 @@ END;
 ALTER TABLE board_comment ADD comment_root number;
 ALTER TABLE board_comment ADD comment_step number default 0;
 ALTER TABLE board_comment ADD comment_reply varchar2(1) default 'N';
+
+ALTER TABLE board_comment DROP CONSTRAINT board_comment_bno_fk;		//제약조건 제거
+
+commit;
+
+-------------------------------- Shopping 테이블
+create table shopping(
+    shopping_no number constraint shopping_no_pk primary key not null,
+    shopping_category varchar2(20) default '상품' not null,
+    shopping_title varchar2(300) not null,
+    shopping_content clob,
+    shopping_header varchar2(100),
+    shopping_division varchar2(20),
+    shopping_writer varchar2(20) not null,
+    shopping_writedate date default sysdate not null,
+    shopping_readcnt number default 0,
+    shopping_pushcnt number default 0,
+    shopping_scrapcnt number default 0,
+    constraint shopping_writer_fk FOREIGN KEY(shopping_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+ALTER TABLE shopping RENAME COLUMN shopping_category TO board_category;
+
+CREATE SEQUENCE seq_shopping START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_shopping
+    BEFORE INSERT on shopping
+    FOR EACH ROW
+BEGIN
+    SELECT seq_shopping.nextval into :new.shopping_no from dual;
+END;
+/
+
+commit;
+
+-------------------------------- DramaBoard 테이블
+
+create table dramaboard(
+    drama_board_no number constraint drama_board_no_pk primary key not null,
+    drama_board_category varchar2(20) default '자료' not null,
+    drama_board_title varchar2(300) not null,
+    drama_board_content clob,
+    drama_board_header varchar2(100),
+    drama_board_division varchar2(20),
+    drama_board_writer varchar2(20) not null,
+    drama_board_writedate date default sysdate not null,
+    drama_board_readcnt number default 0,
+    drama_board_pushcnt number default 0,
+    drama_board_scrapcnt number default 0,
+    constraint drama_board_writer_fk FOREIGN KEY(drama_board_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+ALTER TABLE dramaboard RENAME COLUMN drama_board_category TO board_category;
+
+CREATE SEQUENCE seq_drama_board START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_drama_board
+    BEFORE INSERT on dramaboard
+    FOR EACH ROW
+BEGIN
+    SELECT seq_drama_board.nextval into :new.drama_board_no from dual;
+END;
+/
 
 commit;

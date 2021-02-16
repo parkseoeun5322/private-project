@@ -8,14 +8,16 @@
 <script type="text/javascript">
 	// 로그아웃 시 메인으로 돌아감
 	window.onload = function() { 
-		if("${login_info}" == "") location.href = "/deuqoo";
+		if("${login_info}" == "") {
+			alert("로그인이 필요한 페이지입니다.");
+			location.href = "/deuqoo";
+		}
 	}
 </script>
 </head>
 <body>
 	<div class="input-wrap">
-		<form action="update.re" method="post" class="form-style-i" enctype="multipart/form-data">
-			<input type="hidden" name="review_no" value="${vo.review_no }">
+		<form action="update.tv" method="post" class="form-style-i" enctype="multipart/form-data">
 			<ul>
 				<li>
 					<select>
@@ -47,6 +49,7 @@
 					<textarea name="review_content" id="smartEditor" title="내용" >${vo.review_content }</textarea>
 				</li>
 			</ul>
+			<input type="hidden" name="review_no" value="${vo.review_no }">
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
@@ -81,25 +84,22 @@
 				oEditors.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []); 
 				//textarea의 id를 적어줍니다. 
 				var selecDiv = $("#selecDiv > option:selected").val();
+
+				// 공백 제거 유효성 검사
 				var content = document.getElementById("smartEditor").value;
-				
-				if (selecDiv == "") { 
-					alert("분류를 선택해주세요"); 
+				var text = content.replace(/[<][^>]*[>]/gi, "");
+				text = text.replace(/&nbsp;/gi, "");
+				text = text.trim();
+
+				if (text == "") { 
+					alert("내용을 입력해주세요."); 
+					oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
 					return; 
-				}
-				 
-				if(content == "" || content == null || content == '&nbsp;' || 
-				   content == '<br>' || content == '<br/>' || 
-				   content == '<p>&nbsp;</p>') { 
-					   alert("본문을 작성해주세요."); 
-					   oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
-					   return; 
-				} //이 부분은 스마트에디터 유효성 검사 부분이니 참고하시길 바랍니다.
 				
-				if(confirm("글을 수정하시겠습니까?")) { 
+				} else if(confirm("글을 수정하시겠습니까?")) { 
 					$("form").submit(); 
 				}
-			}); 
+			});
 		});
 
 	</script>

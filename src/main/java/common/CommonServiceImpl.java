@@ -15,8 +15,8 @@ public class CommonServiceImpl implements CommonServiceIF {
 	}
 
 	@Override
-	public List<BoardCommentVO> board_comment_list(int comment_bno) {
-		return dao.board_comment_list(comment_bno);
+	public List<BoardCommentVO> board_comment_list(BoardCommentVO vo) {
+		return dao.board_comment_list(vo);
 	}
 
 	@Override

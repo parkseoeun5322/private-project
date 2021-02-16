@@ -8,7 +8,10 @@
 <script type="text/javascript">
 	// 로그아웃 시 메인으로 돌아감
 	window.onload = function() { 
-		if("${login_info}" == "") location.href = "/deuqoo";
+		if("${login_info}" == "") {
+			alert("로그인이 필요한 페이지입니다.");
+			location.href = "/deuqoo";
+		}
 	}
 </script>
 </head>
@@ -52,8 +55,6 @@
 			</ul>
 		</form>
 		<div class="btnSet">
-<!-- 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a> -->
-<!-- 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { alert('글 등록') }">등록</a> -->
 			<a class="btn-fill" id="saveBtn" onclick="go_submit();">등록</a>
 			<a class="btn-empty" href="list.re">취소</a>
 		</div>
@@ -83,39 +84,23 @@
 
 		function go_submit() {
 			if(necessary ()) {
-				if(editor_check("smarteditor", oEditors)) {
-					alert("글 등록!");
+				var content = oEditors.getById["smartEditor"].getIR();
+				
+				// 공백 제거 유효성 검사
+				var text = content.replace(/[<][^>]*[>]/gi, "");
+				text = text.replace(/&nbsp;/gi, "");
+				text = text.trim();
+
+				if (text == "") { 
+					alert("내용을 입력해주세요."); 
+					oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
+					return; 
+				} else {
+					oEditors.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []);
+					$("form").submit();
 				}
 			}
-
-		}
-		
-		$(function() {
-			$("#saveBtn").click(function() { 
-				oEditors.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []); 
-				
-				/*
-				var selecDiv = $("#selecDiv > option:selected").val();
-				var content = document.getElementById("smartEditor").value;
-				
-				if (selecDiv == "분류") { 
-					alert("분류를 선택해주세요"); 
-					return; 
-				}
-				if(content == "" || content == null || content == '&nbsp;' || 
-				   content == '<br>' || content == '<br/>' || 
-				   content == '<p>&nbsp;</p>') { 
-					   alert("본문을 작성해주세요."); 
-					   oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
-					   return; 
-				} //이 부분은 스마트에디터 유효성 검사 부분이니 참고하시길 바랍니다.
-				
-				if(confirm("글을 저장하시겠습니까?")) { 
-					$("form").submit(); 
-				}
-				*/
-			}); 
-		});
+		} //go_submit()
 
 	</script>
 </body>
