@@ -238,3 +238,31 @@ END;
 /
 
 commit;
+
+-------------------------------- Bluray 테이블
+create table bluray(
+    bluray_no number constraint bluray_no_pk primary key not null,
+    board_category varchar2(20) default '블레' not null,
+    bluray_title varchar2(300) not null,
+    bluray_content clob,
+    bluray_header varchar2(100),
+    bluray_division varchar2(20),
+    bluray_writer varchar2(20) not null,
+    bluray_writedate date default sysdate not null,
+    bluray_readcnt number default 0,
+    bluray_pushcnt number default 0,
+    bluray_scrapcnt number default 0,
+    constraint bluray_writer_fk FOREIGN KEY(bluray_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+CREATE SEQUENCE seq_bluray START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_bluray
+    BEFORE INSERT on bluray
+    FOR EACH ROW
+BEGIN
+    SELECT seq_bluray.nextval into :new.bluray_no from dual;
+END;
+/
+
+commit;
