@@ -8,7 +8,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	.detail_style li:nth-child(3) a:hover { text-decoration: underline; }
 </style>
 <script type="text/javascript">
 	//추천하기 버튼 클릭 시
@@ -129,7 +128,13 @@
 			</li>
 			<li>${fn:replace( fn:replace(vo.drama_board_content, less, '<'), greater, '>') }</li>
 			<li>
-				<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				<c:if test="${empty myPage }">
+					<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				<c:if test="${not empty myPage }">
+					<div class="fl"><a href="list.info"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				
 				<c:if test="${login_info ne null }">
 					<div class="fr">
 						<span>
@@ -158,6 +163,7 @@
 			<input type="hidden" name="search" value="${page.search }" />
 			<input type="hidden" name="keyword" value="${page.keyword }" />
 			<input type="hidden" name="pageList" value="${page.pageList }" />
+			<input type="hidden" name="myPage" value="${myPage }" />
 		</form>
 			<c:if test="${login_info ne null }">
 				<div class="comment_wrap">
@@ -218,7 +224,8 @@
 			var content = oEditors1.getById["comment"].getIR();
 
 			// 공백 제거 유효성 검사
-			var text = content.replace(/[<][^>]*[>]/gi, "");
+			var text = content.replace(/(<p>|<\/p>)/gi, "");
+			text = text.replace(/<br>/gi, "");
 			text = text.replace(/&nbsp;/gi, "");
 			text = text.trim();
 

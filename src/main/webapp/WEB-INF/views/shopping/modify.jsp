@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,10 +46,11 @@
 			</ul>
 			<ul>
 				<li>
-					<textarea name="shopping_content" id="smartEditor" title="내용" >${vo.shopping_content }</textarea>
+					<textarea name="shopping_content" id="smartEditor" title="내용" >${fn:replace( fn:replace(vo.shopping_content, less, '<'), greater, '>') }</textarea>
 				</li>
 			</ul>
 			<input type="hidden" name="shopping_no" value="${vo.shopping_no }">
+			<input type="hidden" name="myPage" value="${myPage }">
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
@@ -87,7 +88,8 @@
 
 				// 공백 제거 유효성 검사
 				var content = document.getElementById("smartEditor").value;
-				var text = content.replace(/[<][^>]*[>]/gi, "");
+				var text = content.replace(/(<p>|<\/p>)/gi, "");
+				text = text.replace(/<br>/gi, "");
 				text = text.replace(/&nbsp;/gi, "");
 				text = text.trim();
 

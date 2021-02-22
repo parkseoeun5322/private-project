@@ -30,18 +30,28 @@ public class DramaController {
 	
 	//글 삭제처리 요청
 	@RequestMapping("/delete.info")
-	public String delete(int drama_board_no, Model model) {
+	public String delete(int drama_board_no, String myPage, 
+			 			HttpSession session, Model model) {
 		//선택한 방명록 글을 DB에서 삭제한 후 목록화면으로 연결
 		service.dramaboard_delete(drama_board_no);
-		model.addAttribute("page", page);
-		model.addAttribute("url", "list.info");
+		String member_id = ((MemberVO)session.getAttribute("login_info")).getMember_id();
+		
+		// 마이페이지에서 상세 페이지로 넘어왔을 경우
+		if(myPage != null) {
+			model.addAttribute("url", "document.my");
+			model.addAttribute("member_id", member_id);
+		} else {
+			model.addAttribute("page", page);
+			model.addAttribute("url", "list.info");
+		}
 		
 		return "drama/redirect";
 	}
 	
 	//글 변경사항 수정 요청
 	@RequestMapping("/update.info")
-	public String update(DramaBoardVO vo, Model model) {
+	public String update(DramaBoardVO vo, String myPage, Model model) {
+		System.out.println(vo.getDrama_board_content());
 		vo.setDrama_board_content(common.videoUrl(vo.getDrama_board_content()));
 		// → 동영상 url 처리
 		
@@ -50,23 +60,26 @@ public class DramaController {
 		
 		model.addAttribute("url", "detail.info");
 		model.addAttribute("drama_board_no", vo.getDrama_board_no());
+		model.addAttribute("myPage", myPage);
+		
 		return "drama/redirect";
 	}
 	
 	// 글 수정화면 요청
 	@RequestMapping("/modify.info")
-	public String modify(int drama_board_no, Model model) {
+	public String modify(int drama_board_no, String myPage, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.dramaboard_detail(drama_board_no));
 		model.addAttribute("less", "&lt;");
 		model.addAttribute("greater", "&gt;");
+		model.addAttribute("myPage", myPage);
 		
 		return "drama/info_modify";
 	}
 	
 	// 글 상세 정보 조회
 	@RequestMapping("/detail.info")
-	public String detail(int drama_board_no, Model model, HttpSession session) {
+	public String detail(int drama_board_no, String myPage, Model model, HttpSession session) {
 		service.dramaboard_read(drama_board_no);		//조회수 증가
 		
 		PushVO pvo = new PushVO();
@@ -94,6 +107,7 @@ public class DramaController {
 		model.addAttribute("less", "&lt;");
 		model.addAttribute("greater", "&gt;");
 		model.addAttribute("page", page);
+		model.addAttribute("myPage", myPage);
 		
 		return "drama/info_detail";
 	}
@@ -166,7 +180,6 @@ public class DramaController {
 		// 댓글 수 구하기
 		List<DramaBoardVO> vo_list = list.getList();
 		for (DramaBoardVO vo: vo_list) {
-			System.out.println(vo.getDrama_board_title());
 			vo.setDrama_board_commentcnt(service.dramaboard_comment_cnt(vo));
 		}
 

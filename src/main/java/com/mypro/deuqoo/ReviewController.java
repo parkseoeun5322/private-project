@@ -27,20 +27,32 @@ public class ReviewController {
 	
 	//글 삭제처리 요청
 	@RequestMapping("/delete.re")
-	public String delete(int review_no, Model model) {
+	public String delete(int review_no, String myPage,
+						HttpSession session, Model model) {
 		//선택한 방명록 글을 DB에서 삭제한 후 목록화면으로 연결
 		service.review_delete(review_no);
-		model.addAttribute("page", page);
-		model.addAttribute("url", "list.re");
+		String member_id = ((MemberVO)session.getAttribute("login_info")).getMember_id();
+		
+		//마이페이지에서 상세 페이지로 넘어왔을 경우
+		if(myPage != null) {
+			model.addAttribute("url", "document.my");
+			model.addAttribute("member_id", member_id);
+		} else {
+			model.addAttribute("page", page);
+			model.addAttribute("url", "list.re");
+		}
 		
 		return "review/redirect";
 	}
 	
 	//리뷰 글 변경사항 수정 요청
 	@RequestMapping("/update.re")
-	public String update(ReviewVO vo, Model model) {
+	public String update(ReviewVO vo, String myPage, Model model) {
+		vo.setReview_content(common.videoUrl(vo.getReview_content()));
+		// → 동영상 url 처리
 		
 		service.review_update(vo);
+		// → 업데이트 처리
 		
 		//return "redirect:detail.re?review_no=" + vo.getReview_no();
 		// → url이 바뀌는 문제가 생김
@@ -51,21 +63,25 @@ public class ReviewController {
 		
 		model.addAttribute("url", "detail.re");
 		model.addAttribute("review_no", vo.getReview_no());
+		model.addAttribute("myPage", myPage);
+		
 		return "review/redirect";
 	}
 	
 	//리뷰 글 수정화면 요청
 	@RequestMapping("/modify.re")
-	public String modify(int review_no, Model model) {
+	public String modify(int review_no, String myPage, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.review_detail(review_no));
+		model.addAttribute("less", "&lt;");
+		model.addAttribute("greater", "&gt;");
 		
 		return "review/modify";
 	}
 	
 	// 리뷰 글 상세정보 조회
 	@RequestMapping("/detail.re")
-	public String detail(int review_no, Model model, HttpSession session) {
+	public String detail(int review_no, String myPage, Model model, HttpSession session) {
 		service.review_read(review_no);		//조회수 증가
 		
 		PushVO pvo = new PushVO();
@@ -88,6 +104,9 @@ public class ReviewController {
 		//선택한 방명록 글 정보를 DB에서 조회해와 상세화면에 출력
 		model.addAttribute("vo", service.review_detail(review_no));
 		model.addAttribute("page", page);
+		model.addAttribute("less", "&lt;");
+		model.addAttribute("greater", "&gt;");
+		model.addAttribute("myPage", myPage);
 		
 		return "review/detail";
 	}
@@ -96,6 +115,7 @@ public class ReviewController {
 	@RequestMapping("/insert.re")
 	public String insert(ReviewVO vo, HttpSession session) {
 		vo.setReview_writer(((MemberVO) session.getAttribute("login_info")).getMember_id());
+		vo.setReview_content(common.videoUrl(vo.getReview_content()));
 		service.review_insert(vo);
 
 		// 불판 글 목록 화면으로 이동

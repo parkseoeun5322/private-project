@@ -18,4 +18,6 @@ public class BoardCommentVO {
 	private int comment_root;
 	private int comment_step;
 	private String comment_reply;
+	
+	private String comment_title;	//DB X
 }

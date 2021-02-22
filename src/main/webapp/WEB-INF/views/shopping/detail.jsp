@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,9 +125,15 @@
 					<span>댓글<b>${vo.shopping_commentcnt }</b></span>
 				</div>
 			</li>
-			<li>${vo.shopping_content }</li>
+			<li>${fn:replace( fn:replace(vo.shopping_content, less, '<'), greater, '>') }</li>
 			<li>
-				<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				<c:if test="${empty myPage }">
+					<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				<c:if test="${not empty myPage }">
+					<div class="fl"><a href="list.tv"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				
 				<c:if test="${login_info ne null }">
 					<div class="fr">
 						<span>
@@ -156,6 +162,7 @@
 			<input type="hidden" name="search" value="${page.search }" />
 			<input type="hidden" name="keyword" value="${page.keyword }" />
 			<input type="hidden" name="pageList" value="${page.pageList }" />
+			<input type="hidden" name="myPage" value="${myPage }" />
 		</form>
 			<c:if test="${login_info ne null }">
 				<div class="comment_wrap">
@@ -217,7 +224,8 @@
 			var content = oEditors1.getById["comment"].getIR();
 
 			// 공백 제거 유효성 검사
-			var text = content.replace(/[<][^>]*[>]/gi, "");
+			var text = content.replace(/(<p>|<\/p>)/gi, "");
+			text = text.replace(/<br>/gi, "");
 			text = text.replace(/&nbsp;/gi, "");
 			text = text.trim();
 

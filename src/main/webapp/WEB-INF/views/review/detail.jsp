@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,9 +126,15 @@
 					<span>댓글<b>${vo.review_commentcnt }</b></span>
 				</div>
 			</li>
-			<li>${vo.review_content }</li>
+			<li>${fn:replace( fn:replace(vo.review_content, less, '<'), greater, '>') }</li>
 			<li>
-				<div class="fl"><a onclick="$('form').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				<c:if test="${empty myPage }">
+					<div class="fl"><a onclick="$('form').submit()"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				<c:if test="${not empty myPage }">
+					<div class="fl"><a href="list.re"><i class="fas fa-bars"></i>목록</a></div>
+				</c:if>
+				
 				<c:if test="${login_info ne null }">
 					<div class="fr">
 						<span>
@@ -145,17 +152,18 @@
 					</div>
 				</c:if>
 				<c:if test="${login_info.member_id eq vo.review_writer }">
-					<div class="fr"><a onclick="$('form').attr('action', 'modify.re'); $('form').submit()">수정</a></div>
-					<div class="fr"><a onclick="if(confirm('정말 삭제하시겠습니까?')) { $('form').attr('action', 'delete.re'); $('form').submit() }">삭제</a></div>
+					<div class="fr"><a onclick="$('#pageForm').attr('action', 'modify.re'); $('#pageForm').submit()">수정</a></div>
+					<div class="fr"><a onclick="if(confirm('정말 삭제하시겠습니까?')) { $('#pageForm').attr('action', 'delete.re'); $('#pageForm').submit() }">삭제</a></div>
 				</c:if>
 			</li>
 		</ul>
-		<form action="list.re" method="post">
+		<form id="pageForm" action="list.re" method="post">
 			<input type="hidden" name="review_no" value="${vo.review_no }" />
 			<input type="hidden" name="curPage" value="${page.curPage }" />
 			<input type="hidden" name="search" value="${page.search }" />
 			<input type="hidden" name="keyword" value="${page.keyword }" />
 			<input type="hidden" name="pageList" value="${page.pageList }" />
+			<input type="hidden" name="myPage" value="${myPage }" />
 		</form>
 			<c:if test="${login_info ne null }">
 				<div class="comment_wrap">
@@ -179,7 +187,8 @@
 		function comment_list() {
 			$.ajax({
 				url: "board/comment/${vo.review_no}",
-				data: { board_writer: "${vo.review_writer}"},	//글 작성자 정보를 보내 댓글 목록에 표시
+				data: { board_writer: "${vo.review_writer}",
+						board_category: "${vo.board_category }" },	//글 작성자 정보를 보내 댓글 목록에 표시
 				success: function(data) {
 					$("#comment_list").html(data);
 					
@@ -216,7 +225,8 @@
 			var content = oEditors1.getById["comment"].getIR();
 
 			// 공백 제거 유효성 검사
-			var text = content.replace(/[<][^>]*[>]/gi, "");
+			var text = content.replace(/(<p>|<\/p>)/gi, "");
+			text = text.replace(/<br>/gi, "");
 			text = text.replace(/&nbsp;/gi, "");
 			text = text.trim();
 

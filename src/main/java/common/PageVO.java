@@ -28,6 +28,7 @@ public class PageVO {
 	
 	private String header;		//말머리
 	private String division;	//분류
+	private String member_id;	//마이페이지 이동 시 아이디
 	
 	public void setTotalList(int totalList) {
 		this.totalList = totalList;

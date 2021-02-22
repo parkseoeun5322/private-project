@@ -13,7 +13,7 @@
 			</c:if>
 			<c:if test="${!empty login_info }">
 				<li><a id="mypage"
-						href="mypage?member_id=${login_info.member_id }">마이 페이지</a></li>
+						onclick="$('#idForm').submit()">마이 페이지</a></li>
 				<li><a onclick="go_logout()" style="cursor: pointer;">로그아웃</a></li>
 			</c:if>
 		</ul>	
@@ -24,7 +24,7 @@
 			<li><a href="list.dr" id="second-item" ${category eq 'dr' ? 'class="active"' : '' }>드라마의 모든 것</a></li>
 			<li><a href="list.tv" ${category eq 'tv' ? 'class="active"' : '' }>TV 속 이 상품</a></li>
 			<li><a href="list.re" ${category eq 're' ? 'class="active"' : '' }>드라마 리뷰</a></li>
-			<li><a href="" ${category eq 'bl' ? 'class="active"' : '' }>블루레이 모집</a></li>
+			<li><a href="list.bl" ${category eq 'bl' ? 'class="active"' : '' }>블루레이 모집</a></li>
 			<li>
 				<input type="text" />
 				<!-- <span><i class="fas fa-search"></i></span> -->
@@ -37,6 +37,10 @@
 			</ul>
 		</div>
 	</div>
+	<form id="idForm" action="mypage" method="post">
+		<input type="hidden" name="curPage" value="1">
+		<input type="hidden" name="member_id" value="${login_info.member_id }">
+	</form>
 </header>
 <script type="text/javascript">
 function go_logout() {

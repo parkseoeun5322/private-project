@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mapper 태그를 사용하기 위한 코드 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mypage.mapper">
+	<!-- 작성 댓글 조회 -->
+	<select id="commentList" resultType="common.BoardCommentVO">
+        select c.* from 
+	        	(select c.*, rownum comment_rownum from 
+	        		(select comment_no, comment_bno, comment_writer, comment_content, comment_writedate, comment_category, case 
+	        		when comment_category = '자료' then (select drama_board_title from dramaboard where drama_board_no = comment_bno)
+	        		when comment_category = '상품' then (select shopping_title from shopping where shopping_no = comment_bno)
+	        		when comment_category = '리뷰' then (select review_title from review where review_no = comment_bno)
+	        		when comment_category = '블레' then (select bluray_title from bluray where bluray_no = comment_bno)
+	        		end as comment_title
+	        	from board_comment where comment_writer = #{member_id}
+	        	order by comment_writedate) c) c 
+        	where comment_rownum between #{beginList} and #{endList} order by comment_rownum desc
+	</select>
+	<select id="commentTotal" resultType="integer">
+		select count(*) from board_comment where comment_writer = #{member_id}
+	</select>
+
+	<!-- 작성 글 조회 -->
+	<select id="documentList" resultType="mypage.BoardVO">
+		select b.* from 
+			(select b.*, rownum board_rownum from 
+					(select b.* from 
+						(select bulpan_no board_no, board_category, bulpan_title board_title, bulpan_writedate board_writedate from bulpan where bulpan_writer = #{member_id}
+						union
+						select drama_board_no, board_category, drama_board_title, drama_board_writedate from dramaboard where drama_board_writer = #{member_id}
+						union
+						select shopping_no, board_category, shopping_title, shopping_writedate from shopping where shopping_writer = #{member_id}
+						union
+						select review_no, board_category, review_title, review_writedate from review where review_writer = #{member_id}
+						union
+						select bluray_no, board_category, bluray_title, bluray_writedate from bluray where bluray_writer = #{member_id}) b 
+					order by board_writedate) b) b
+		where board_rownum between #{beginList} and #{endList} 			
+		order by board_rownum desc
+	</select>
+	<select id="documentTotal" resultType="integer">
+		select count(*) from 
+		    (select bulpan_no board_no, board_category, bulpan_title board_title, bulpan_writedate board_writedate from bulpan where bulpan_writer = #{member_id}
+			union
+			select drama_board_no, board_category, drama_board_title, drama_board_writedate from dramaboard where drama_board_writer = #{member_id}
+			union
+			select shopping_no, board_category, shopping_title, shopping_writedate from shopping where shopping_writer = #{member_id}
+			union
+			select review_no, board_category, review_title, review_writedate from review where review_writer = #{member_id}
+			union
+			select bluray_no, board_category, bluray_title, bluray_writedate from bluray where bluray_writer = #{member_id})
+	</select>
+
+	<!-- 스크랩 -->
+	<sql id="search_where">
+		<if test="search == 'scrap_title' or search == 'scrap_content'">
+			where ${search}
+			like '%' || #{keyword} || '%'
+		</if>
+		<if test="search == 'all'">
+			where scrap_title like '%' || #{keyword} || '%'
+			or scrap_content like '%' || #{keyword} || '%'
+		</if>
+	</sql>
+	 <select id="scrapList" resultType="common.ScrapVO">
+	 	select s.* from 
+		 	(select s.*, rownum scrap_rownum from
+				(select s.* from (select scrap_no, scrap_boardno, scrap_id, scrap_date, scrap_title, scrap_category, case 
+					when scrap_category = '자료' then (select drama_board_content from dramaboard where drama_board_no = scrap_boardno)
+					when scrap_category = '상품' then (select shopping_content from shopping where shopping_no = scrap_boardno)
+					when scrap_category = '리뷰' then (select review_content from review where review_no = scrap_boardno)
+					when scrap_category = '블레' then (select bluray_content from bluray where bluray_no = scrap_boardno)
+					end as scrap_content
+				from scrap where scrap_id = #{member_id}) s 
+				<include refid="search_where"/> 
+				order by scrap_date desc) s) s 
+			where scrap_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="scrapTotal" resultType="integer">
+	 	select count (*) from (select scrap_no, scrap_boardno, scrap_id, scrap_date, 
+	 			scrap_title, scrap_category, case 
+					when scrap_category = '자료' then (select drama_board_content from dramaboard where drama_board_no = scrap_boardno)
+					when scrap_category = '상품' then (select shopping_content from shopping where shopping_no = scrap_boardno)
+					when scrap_category = '리뷰' then (select review_content from review where review_no = scrap_boardno)
+					when scrap_category = '블레' then (select bluray_content from bluray where bluray_no = scrap_boardno)
+					end as scrap_content
+				from scrap where scrap_id = #{member_id})
+	 	<include refid="search_where" />
+	 </select>
+	
+	<!-- 회원 정보 불러오기 -->
+	<select id="memberInfo" resultType="member.MemberVO">
+		select * from member where member_id = #{member_id}
+	</select>
+</mapper>

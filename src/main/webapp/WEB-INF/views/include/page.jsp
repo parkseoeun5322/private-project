@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <style type="text/css">
 	.page_on, .page_off, .page_first, .page_prev, .page_next, .page_last {
@@ -66,6 +65,7 @@
 		$("[name=keyword]").val("${page.keyword}");
 		$("[name=header]").val("${page.header}");
 		$("[name=division]").val("${page.division}");
+		$("[name=member_id]").val("${page.member_id}");
 		$("form").submit();
 	}
 </script>

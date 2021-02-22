@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +17,7 @@
 </head>
 <body>
 	<div class="input-wrap">
-		<form action="update.tv" method="post" class="form-style-i" enctype="multipart/form-data">
+		<form action="update.re" method="post" class="form-style-i" enctype="multipart/form-data">
 			<ul>
 				<li>
 					<select>
@@ -46,10 +46,11 @@
 			</ul>
 			<ul>
 				<li>
-					<textarea name="review_content" id="smartEditor" title="내용" >${vo.review_content }</textarea>
+					<textarea name="review_content" id="smartEditor" title="내용" >${fn:replace( fn:replace(vo.review_content, less, '<'), greater, '>') }</textarea>
 				</li>
 			</ul>
 			<input type="hidden" name="review_no" value="${vo.review_no }">
+			<input type="hidden" name="myPage" value="${myPage }" />
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
@@ -87,7 +88,8 @@
 
 				// 공백 제거 유효성 검사
 				var content = document.getElementById("smartEditor").value;
-				var text = content.replace(/[<][^>]*[>]/gi, "");
+				var text = content.replace(/(<p>|<\/p>)/gi, "");
+				text = text.replace(/<br>/gi, "");
 				text = text.replace(/&nbsp;/gi, "");
 				text = text.trim();
 
@@ -96,7 +98,7 @@
 					oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
 					return; 
 				
-				} else if(confirm("글을 수정하시겠습니까?")) { 
+				} else if(confirm("글을 수정하시겠습니까?")) {
 					$("form").submit(); 
 				}
 			});

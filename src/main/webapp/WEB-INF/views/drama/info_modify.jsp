@@ -50,6 +50,7 @@
 				</li>
 			</ul>
 			<input type="hidden" name="drama_board_no" value="${vo.drama_board_no }">
+			<input type="hidden" name="myPage" value="${myPage }">
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>
@@ -87,7 +88,8 @@
 
 				// 공백 제거 유효성 검사
 				var content = document.getElementById("smartEditor").value;
-				var text = content.replace(/[<][^>]*[>]/gi, "");
+				var text = content.replace(/(<p>|<\/p>)/gi, "");
+				text = text.replace(/<br>/gi, "");
 				text = text.replace(/&nbsp;/gi, "");
 				text = text.trim();
 
@@ -96,7 +98,7 @@
 					oEditors.getById["smartEditor"].exec("FOCUS"); //포커싱 
 					return; 
 				
-				} else if(confirm("글을 수정하시겠습니까?")) { 
+				} else if(confirm("글을 수정하시겠습니까?")) {
 					$("form").submit(); 
 				}
 			}); 

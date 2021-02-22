@@ -14,4 +14,7 @@ public class ScrapVO {
 	private Date scrap_date;
 	private String scrap_title;
 	private String scrap_category;
+	
+	private int scrap_rownum;		//DB X
+	private String scrap_content;	//DB X
 }

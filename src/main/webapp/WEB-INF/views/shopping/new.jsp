@@ -87,7 +87,8 @@
 				var content = oEditors.getById["smartEditor"].getIR();
 				
 				// 공백 제거 유효성 검사
-				var text = content.replace(/[<][^>]*[>]/gi, "");
+				var text = content.replace(/(<p>|<\/p>)/gi, "");
+				text = text.replace(/<br>/gi, "");
 				text = text.replace(/&nbsp;/gi, "");
 				text = text.trim();
 

@@ -85,8 +85,8 @@
 	padding: 0 0 0 10px;
 }
 
-.table-style-b td:nth-child(3)>a:nth-child(1) { font-weight: bold; }
-.table-style-b td:nth-child(3)>a:nth-child(2) { margin: 0 0 0 5px; }
+.table-style-b td:nth-child(3) > a:nth-child(1) { font-weight: bold; }
+.table-style-b td:nth-child(3) > a:nth-child(2) { margin: 0 0 0 5px; }
 
 
 /* 3. 글 목록 화면 form (검색 부분) CSS */
@@ -167,6 +167,7 @@
 .detail_style li:nth-child(2) span:not(:last-child) { margin: 0 15px 0 0; }
 .detail_style li:nth-child(2) b { margin: 0 0 0 5px; }
 .detail_style li:nth-child(3) { padding: 30px 15px; }
+.detail_style li:nth-child(3) a:hover { text-decoration: underline; }
 .detail_style li:nth-child(4) { border-top: 1px solid #ddd; padding: 15px; }
 .detail_style li:nth-child(4)::after { content: ""; display: block; clear: both; }
 .detail_style li:nth-child(4) div { border: 1px solid #000; padding: 10px; }
@@ -186,3 +187,29 @@
 .detail_style li:nth-child(4) div span:nth-child(1) { margin: 0 10px 0 0; }
 .detail_style li:nth-child(4) div span:nth-child(2) b { margin: 0 0 0 5px; }
 .detail_style img { max-width: 1000px; }
+
+/* 게시판의 드라마 분류 부분 및 마이페이지 분류 부분 */
+.list-top { width: 1000px; margin: 20px auto 0; }
+.list-top > ul { border-bottom: 1px solid #787878; }
+.list-top > ul::after { content: ""; display: block; clear: both; }
+.list-top > ul > li { 
+	float: left; 
+	border: 1px solid #ddd; 
+	border-top: 0; border-bottom: 0;
+	background: #fdfdfd; }
+.list-top > ul > li:not(:last-child) { border-right: 0; }
+.list-top > ul > li.on {
+	border: 1px solid #787878;
+	border-bottom: 1px solid #fff;
+	margin: 0 0 -1px 0;
+	background: transparent;
+}
+.list-top > ul > li.on > a { color: #000; padding-top: 1px; font-weight: 700; }
+.list-top > ul > li > a {
+	float: left;
+	border-top: 1px solid #ddd; 
+	display: block;
+	height: 35px; line-height: 35px; 
+	padding: 0 25px; 
+	color: #6b6b6b; font-size: 14px; 
+}

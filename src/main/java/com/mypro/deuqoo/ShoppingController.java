@@ -28,20 +28,32 @@ public class ShoppingController {
 	
 	//글 삭제처리 요청
 	@RequestMapping("/delete.tv")
-	public String delete(int shopping_no, Model model) {
+	public String delete(int shopping_no, String myPage, 
+ 						HttpSession session, Model model) {
 		//선택한 방명록 글을 DB에서 삭제한 후 목록화면으로 연결
 		service.shopping_delete(shopping_no);
-		model.addAttribute("page", page);
-		model.addAttribute("url", "list.tv");
+		String member_id = ((MemberVO)session.getAttribute("login_info")).getMember_id();
+		
+		// 마이페이지에서 상세 페이지로 넘어왔을 경우
+		if(myPage != null) {
+			model.addAttribute("url", "document.my");
+			model.addAttribute("member_id", member_id);
+		} else {
+			model.addAttribute("page", page);
+			model.addAttribute("url", "list.tv");
+		}
 		
 		return "shopping/redirect";
 	}
 	
 	//리뷰 글 변경사항 수정 요청
 	@RequestMapping("/update.tv")
-	public String update(ShoppingVO vo, Model model) {
+	public String update(ShoppingVO vo, String myPage, Model model) {
+		vo.setShopping_content(common.videoUrl(vo.getShopping_content()));
+		// → 동영상 url 처리
 		
 		service.shopping_update(vo);
+		// → 업데이트 처리
 		
 		//return "redirect:detail.re?review_no=" + vo.getReview_no();
 		// → url이 바뀌는 문제가 생김
@@ -52,21 +64,26 @@ public class ShoppingController {
 		
 		model.addAttribute("url", "detail.tv");
 		model.addAttribute("shopping_no", vo.getShopping_no());
+		model.addAttribute("myPage", myPage);
+		
 		return "shopping/redirect";
 	}
 	
 	// 글 수정화면 요청
 	@RequestMapping("/modify.tv")
-	public String modify(int shopping_no, Model model) {
+	public String modify(int shopping_no, String myPage, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.shopping_detail(shopping_no));
+		model.addAttribute("less", "&lt;");
+		model.addAttribute("greater", "&gt;");
+		model.addAttribute("myPage", myPage);
 		
 		return "shopping/modify";
 	}	
 	
 	// 글 상세 정보 조회
 	@RequestMapping("/detail.tv")
-	public String detail(int shopping_no, Model model, HttpSession session) {
+	public String detail(int shopping_no, String myPage, Model model, HttpSession session) {
 		service.shopping_read(shopping_no);		//조회수 증가
 		
 		PushVO pvo = new PushVO();
@@ -89,6 +106,9 @@ public class ShoppingController {
 		//선택한 방명록 글 정보를 DB에서 조회해와 상세화면에 출력
 		model.addAttribute("vo", service.shopping_detail(shopping_no));
 		model.addAttribute("page", page);
+		model.addAttribute("less", "&lt;");
+		model.addAttribute("greater", "&gt;");
+		model.addAttribute("myPage", myPage);
 		
 		return "shopping/detail";
 	}
@@ -98,6 +118,7 @@ public class ShoppingController {
 	@RequestMapping("/insert.tv")
 	public String insert(ShoppingVO vo, HttpSession session) {
 		vo.setShopping_writer(((MemberVO) session.getAttribute("login_info")).getMember_id());
+		vo.setShopping_content(common.videoUrl(vo.getShopping_content()));	//동영상 url 처리
 		service.shopping_insert(vo);
 
 		// 불판 글 목록 화면으로 이동
