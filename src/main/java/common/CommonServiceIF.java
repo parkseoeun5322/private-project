@@ -14,4 +14,6 @@ public interface CommonServiceIF {
 	
 	int board_reply_regist(BoardCommentVO vo);					//대댓글 저장 처리
 	
+	int comment_delete(int comment_no);							//댓글 삭제
+	
 }

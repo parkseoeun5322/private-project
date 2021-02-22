@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>    
@@ -51,7 +50,8 @@
 					<span class="fr mr20">
 						<c:if test="${login_info.member_id eq cvo.comment_writer }">
 							<a class="btn-fill-s btn-modify-save" onclick="$('#form${cvo.comment_no }').submit();">수정</a>
-							<a class="btn-fill-s btn-delete-cancel">삭제</a>
+							<a class="btn-fill-s btn-delete-cancel" 
+								onclick="if(confirm('댓글을 삭제하시겠습니까?')) { $('#form${cvo.comment_no}').attr('action', 'comment_delete'); $('#form${cvo.comment_no }').submit(); }">삭제</a>
 						</c:if>
 						<c:if test="${cvo.comment_reply eq 'N' }">	<!-- 대댓글 작성시 -->
 							<a class="btn-fill-s btn-reply" onclick="go_reply(${cvo.comment_no });">댓글</a>

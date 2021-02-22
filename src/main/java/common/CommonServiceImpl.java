@@ -44,4 +44,9 @@ public class CommonServiceImpl implements CommonServiceIF {
 		return dao.board_reply_regist(vo);
 	}
 
+	@Override
+	public int comment_delete(int comment_no) {
+		return dao.comment_delete(comment_no);
+	}
+
 }

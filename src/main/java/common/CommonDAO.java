@@ -46,4 +46,9 @@ public class CommonDAO implements CommonServiceIF {
 		return sql.insert("common.mapper.reply_regist", vo);
 	}
 
+	@Override
+	public int comment_delete(int comment_no) {
+		return sql.delete("common.mapper.comment_delete", comment_no);
+	}
+
 }

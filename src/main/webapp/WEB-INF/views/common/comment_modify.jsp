@@ -32,7 +32,7 @@
 			<div>
 				<div style="padding: 35px 0 10px 0;">
 					<a class="btn-fill" style="display: inline;" onclick="go_update();">등&nbsp;&nbsp;&nbsp;록</a>
-					<a class="btn-empty">돌아가기</a>
+					<a class="btn-empty" href="javascript:history.go(-1)">돌아가기</a>
 				</div>
 			</div>
 		</div> <!-- .comment_wrap -->

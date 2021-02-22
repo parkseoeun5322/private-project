@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import bluray.BlurayServiceImpl;
 import common.BoardCommentVO;
 import common.CommonServiceImpl;
 import common.PushVO;
@@ -26,6 +27,43 @@ public class CommonController {
 	@Autowired ReviewServiceImpl review_service;
 	@Autowired ShoppingServiceImpl shopping_service;
 	@Autowired DramaBoardServiceImpl dramaboard_service;
+	@Autowired BlurayServiceImpl bluray_service;
+	
+	// 댓글 삭제 업데이트
+	@RequestMapping("/comment_delete")
+	public String delete(BoardCommentVO vo, String myPage, 
+						 String member_id, Model model) {
+		String page = "";
+		
+		common_service.comment_delete(vo.getComment_no());
+		
+		if(myPage != null) {
+			model.addAttribute("url", "comment.my");
+			model.addAttribute("myPage", myPage);
+			model.addAttribute("member_id", member_id);
+			page = "mypage/redirect";
+		} else {
+			if(vo.getComment_category().equals("리뷰")) {
+				model.addAttribute("url", "detail.re");
+				model.addAttribute("review_no", vo.getComment_bno());
+				page = "review/redirect";
+			} else if(vo.getComment_category().equals("상품")) {
+				model.addAttribute("url", "detail.tv");
+				model.addAttribute("shopping_no", vo.getComment_bno());
+				page = "shopping/redirect";
+			} else if(vo.getComment_category().equals("자료")) {
+				model.addAttribute("url", "detail.info");
+				model.addAttribute("drama_board_no", vo.getComment_bno());
+				page = "drama/redirect";
+			} else if(vo.getComment_category().equals("블레")) {
+				model.addAttribute("url", "detail.bl");
+				model.addAttribute("bluray_no", vo.getComment_bno());
+				page = "bluray/redirect";
+			}
+		}
+		
+		return page;
+	}
 	
 	//대댓글 DB 저장
 	@ResponseBody @RequestMapping(value= "/board/reply/regist", 
@@ -60,6 +98,14 @@ public class CommonController {
 			model.addAttribute("url", "detail.tv");
 			model.addAttribute("shopping_no", vo.getComment_bno());
 			page = "shopping/redirect";
+		} else if(vo.getComment_category().equals("자료")) {
+			model.addAttribute("url", "detail.info");
+			model.addAttribute("drama_board_no", vo.getComment_bno());
+			page = "drama/redirect";
+		} else if(vo.getComment_category().equals("블레")) {
+			model.addAttribute("url", "detail.bl");
+			model.addAttribute("bluray_no", vo.getComment_bno());
+			page = "bluray/redirect";
 		}
 		
 		return page;
@@ -132,6 +178,8 @@ public class CommonController {
 			result = shopping_service.shopping_scrap_cancel(vo);
 		} else if(scrap_category.equals("자료")) {
 			result = dramaboard_service.dramaboard_scrap_cancel(vo);
+		} else if(scrap_category.equals("블레")) {
+			result = bluray_service.bluray_scrap_cancel(vo);
 		}
 		
 		return result;
@@ -155,7 +203,10 @@ public class CommonController {
 			result =  shopping_service.shopping_scrap(vo);
 		} else if(scrap_category.equals("자료")) {
 			result = dramaboard_service.dramaboard_scrap(vo);
+		} else if(scrap_category.equals("블레")) {
+			result = bluray_service.bluray_scrap(vo);
 		}
+		
 		return result;
 	}	
 	
@@ -174,7 +225,10 @@ public class CommonController {
 			result = shopping_service.shopping_push_cancel(vo);
 		} else if(push_category.equals("자료")) {
 			result = dramaboard_service.dramaboard_push_cancel(vo);
+		} else if(push_category.equals("블레")) {
+			result = bluray_service.bluray_push_cancel(vo);
 		}
+		
 		return result;
 	}
 	
@@ -195,7 +249,10 @@ public class CommonController {
 			result = shopping_service.shopping_push(vo);
 		} else if(push_category.equals("자료")) {
 			result = dramaboard_service.dramaboard_push(vo);
+		} else if(push_category.equals("블레")) {
+			result = bluray_service.bluray_push(vo);
 		}
+		
 		return result;
 		
 	}
