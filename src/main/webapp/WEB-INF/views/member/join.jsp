@@ -6,17 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	#frmJoin {
-		width: 400px;
-		margin: 0 auto 30px;
-	}
-	
-	#frmJoin > div {
-		border: 1px solid #919191;
-		height: 50px;
-		margin-bottom: 30px;
-	}
-	
+	#frmJoin { width: 400px; margin: 0 auto 30px; }
+	#frmJoin > div { border: 1px solid #919191; height: 50px; margin-bottom: 30px; }
 	#frmJoin > div > span {
 		height: 48px;
 		display: block;
@@ -52,12 +43,7 @@
 	.common { display: none; }
 	.valid { color: #919191; display: block; }
 	.invalid { color: red; display: block;}
-	
-	 .btnSet {
-	 	width: 400px;
-	 	margin: 0 auto;
-	 	overflow: hidden;
-	 }
+	.btnSet { width: 400px; margin: 0 auto; overflow: hidden; }
 	 
 	 #btn-submit, #btn-reset {
 	 	width: 48.5%;
@@ -69,7 +55,6 @@
 	 }
 	 
 	#btn-submit { background-color: #787878; color: #ffffff; font-weight: 900; margin-right: 5px; }
-	
 	#btn-reset { 
 		background-color: #ffffff; 
 		color: #787878;
@@ -77,7 +62,6 @@
 		/* border: 1px solid #000000; */
 		box-shadow: 2px 2px 5px #666666;
 	}
-	
 </style>
 </head>
 <body>
@@ -248,7 +232,7 @@
 
 		} //usernickname_check()
 		
-		// 아이디에 대해 입력 데이터를 변경시 다시 중복확인할 수 있도록 함
+		// 중복확인이 필요한 input태그 입력 데이터가 변경시 다시 중복확인할 수 있도록 함
 		$(".chk").on("keyup", function() {
 			if( $(this).attr("name") == "member_id" ) {
 				if( event.keyCode == 13 ) userid_check();

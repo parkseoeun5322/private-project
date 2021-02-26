@@ -90,6 +90,7 @@
 	
 </style>
 <script type="text/javascript">
+
 	function go_login() {
 		if( $("#userId").val() == "" ) {
 			alert("아이디를 입력하세요.");
@@ -190,7 +191,7 @@
 									 "color": "white",
 									 "transition": "0.4s"});
 			
-			if (!$userId.val()) {
+			if (!$("#userId").val()) {
 				$submit.css("background-color", "").css("color", "");
 			}
 		});
