@@ -21,6 +21,67 @@ public class MypageController {
 	@Autowired BoardPage bpage;
 	@Autowired BoardCommentPage cpage;
 	
+	@RequestMapping("/delete.my")
+	public String delete(HttpSession session, MemberVO vo) {
+		session.setAttribute("login_info", "");
+		service.mypage_deleteInfo(vo.getMember_id());
+		
+		return "home";
+	}
+	
+	@RequestMapping("/updatePw.my")
+	public String updatePw(HttpSession session, Model model, MemberVO vo) {
+		session.setAttribute("mycategory", "info");
+		
+		service.mypage_updatePw(vo);
+		
+		model.addAttribute("infoType", "detailInfo");
+		model.addAttribute("vo", service.mypage_info(vo.getMember_id()));
+		
+		return "mypage/mypage";
+	}
+	
+	@RequestMapping("/modifyPw.my")
+	public String modifyPw(HttpSession session, Model model, String member_id) {
+		session.setAttribute("mycategory", "info");
+		
+		model.addAttribute("infoType", "updatePw");
+		model.addAttribute("vo", service.mypage_info(member_id));
+		
+		return "mypage/mypage";
+	}
+	
+	// 회원 정보 업데이트
+	@RequestMapping("/updateInfo.my")
+	public String updateInfo(HttpSession session, Model model, MemberVO vo) {
+		session.setAttribute("mycategory", "info");
+		
+		service.mypage_updateInfo(vo);
+		
+		model.addAttribute("infoType", "detailInfo");
+		model.addAttribute("vo", service.mypage_info(vo.getMember_id()));
+		
+		return "mypage/mypage";
+	}
+	
+	// 회원 정보 수정 화면 요청
+	@RequestMapping("/modifyInfo.my")
+	public String modifyInfo(HttpSession session, Model model, String member_id) {
+		session.setAttribute("mycategory", "info");
+		
+		MemberVO vo = service.mypage_info(member_id);
+		
+		if(vo.getMember_loginType().equals("N") || vo.getMember_loginType().equals("K")) {
+			vo.setMember_id(vo.getMember_id().substring(1));
+		}
+		
+		model.addAttribute("infoType", "updateInfo");
+		model.addAttribute("vo", vo);
+		
+		return "mypage/mypage";
+	}
+	
+	// 작성 댓글 페이지
 	@RequestMapping("/comment.my")
 	public String mycomment(HttpSession session, Model model, String member_id,
 							@RequestParam(defaultValue = "10") int pageList,
@@ -41,6 +102,7 @@ public class MypageController {
 		return page;
 	}
 	
+	// 작성 글 페이지
 	@RequestMapping("/document.my")
 	public String mydocument(HttpSession session, Model model, String member_id,
 							@RequestParam(defaultValue = "10") int pageList,
@@ -62,6 +124,7 @@ public class MypageController {
 		return page;
 	}
 	
+	// 내 스크랩 페이지
 	@RequestMapping("/scrap.my")
 	public String myscrap(HttpSession session, Model model, String search, 
 							String keyword, String member_id,
@@ -90,7 +153,15 @@ public class MypageController {
 	public String mypage(String member_id, HttpSession session, Model model) {
 		session.setAttribute("category", "");
 		session.setAttribute("mycategory", "info");
-		model.addAttribute("vo", service.mypage_info(member_id));
+		
+		MemberVO vo = service.mypage_info(member_id);
+		
+		if (vo.getMember_loginType().equals("N") || vo.getMember_loginType().equals("K")) {
+			vo.setMember_id(vo.getMember_id().substring(1));
+		}
+		
+		model.addAttribute("infoType", "detailInfo");
+		model.addAttribute("vo", vo);
 		
 		return "mypage/mypage";
 	}

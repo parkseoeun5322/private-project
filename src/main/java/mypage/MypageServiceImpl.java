@@ -31,4 +31,19 @@ public class MypageServiceImpl implements MypageService {
 	public BoardCommentPage mypage_comment(BoardCommentPage page) {
 		return dao.mypage_comment(page);
 	}
+
+	@Override
+	public int mypage_updateInfo(MemberVO vo) {
+		return dao.mypage_updateInfo(vo);
+	}
+
+	@Override
+	public int mypage_updatePw(MemberVO vo) {
+		return dao.mypage_updatePw(vo);
+	}
+
+	@Override
+	public int mypage_deleteInfo(String member_id) {
+		return dao.mypage_deleteInfo(member_id);
+	}
 }

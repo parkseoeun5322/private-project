@@ -4,6 +4,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mypage.mapper">
+	<!-- 회원정보 삭제(탈퇴) -->
+	<update id="deleteInfo">
+		delete from member where member_id = #{member_id}
+	</update>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePw">
+		update member set member_pw = #{member_pw}
+		where member_id = #{member_id}
+	</update>
+
+	<!-- 회원정보 업데이트 -->
+	<update id="updateInfo">
+		update member set member_name = #{member_name}, 
+			member_nickname = #{member_nickname}
+		where member_id = #{member_id}
+	</update>
+
 	<!-- 작성 댓글 조회 -->
 	<select id="commentList" resultType="common.BoardCommentVO">
         select c.* from 

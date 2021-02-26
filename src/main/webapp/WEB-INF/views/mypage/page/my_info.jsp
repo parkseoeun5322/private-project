@@ -18,6 +18,23 @@
 	.info li a { color: #787878; }
 	.info h3, .info ul { margin: 0 0 0 15px; }
 </style>
+<script type="text/javascript">
+	function updatePw() {
+		if("${vo.member_loginType}" == "N" || "${vo.member_loginType}" == "K") {
+			alert("소셜 로그인은 비밀번호 변경이 불가합니다.");
+		} else {
+			$('#idForm').attr('action','modifyPw.my'); 
+			$('#idForm').submit();
+		}
+	} //updatePw()
+
+	function deleteInfo() {
+		if(confirm("정말 탈퇴하시겠습니까?")) {
+			$('#idForm').attr('action','delete.my'); 
+			$('#idForm').submit();
+		}
+	} //deleteInfo()
+</script>
 </head>
 <body>
 	<div class="info_wrap">
@@ -57,9 +74,9 @@
 			<h3>회원 정보</h3>
 			<hr>
 			<ul>
-				<li><a href="">회원 정보 변경</a></li>
-				<li><a href="">비밀번호 변경</a></li>
-				<li><a href="">탈퇴</a></li>
+				<li><a onclick="$('#idForm').attr('action','modifyInfo.my'); $('#idForm').submit();">회원 정보 변경</a></li>
+				<li><a onclick="updatePw();">비밀번호 변경</a></li>
+				<li><a onclick="deleteInfo();">탈퇴</a></li>
 			</ul>
 		</div>
 	</div>

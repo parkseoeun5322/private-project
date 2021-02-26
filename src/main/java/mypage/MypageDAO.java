@@ -44,4 +44,19 @@ public class MypageDAO implements MypageService {
 		page.setList(list);
 		return page;
 	}
+
+	@Override
+	public int mypage_updateInfo(MemberVO vo) {
+		return sql.update("mypage.mapper.updateInfo", vo);
+	}
+
+	@Override
+	public int mypage_updatePw(MemberVO vo) {
+		return sql.update("mypage.mapper.updatePw", vo);
+	}
+
+	@Override
+	public int mypage_deleteInfo(String member_id) {
+		return sql.delete("mypage.mapper.deleteInfo", member_id);
+	}
 }
