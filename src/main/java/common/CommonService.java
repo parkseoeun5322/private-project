@@ -1,6 +1,8 @@
 package common;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.mail.HtmlEmail;
@@ -15,6 +17,40 @@ import member.MemberVO;
 
 @Service
 public class CommonService {
+	
+	//방영중 드라마 정보 크롤링 및 DB 업데이트
+	public List<String> ingDrama_crawling() {
+		List<String> list = new ArrayList<>();
+		
+		String naverUrl = "https://search.naver.com/search.naver";
+		String onairUrl = "?sm=tab_hty.top&where=nexearch&query=드라마&oquery=방영중한국드라마&tqi=hu6q0sprvTossj4s6rGssssstW4-400427";
+		Document doc = null;
+		String[] replace = {"\\\\", "\\/", "\\:", "\\?", "\\\"", "\\<", "\\>", "\\|"};
+		String[] characters = {"\\", "/", ":", "?", "\"", "<", ">", "|"};
+		String text1 = "", text2 = "";
+		
+		try {
+			doc = Jsoup.connect(naverUrl + onairUrl).get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Elements element = doc.select("ul.list_info > li.info_box > strong.title");
+		for(Element el1 : element.select("a._text")) {
+			list.add(el1.text());
+		}
+		 
+		for (int i = 0; i < list.size(); i++) {
+			for (int j = 0; j < characters.length; j++) {
+				if(list.get(i).contains(characters[j])) {
+					list.set(i, list.get(i).replaceAll(replace[j], ""));
+				}
+			}
+		}
+
+		return list;
+	}
+	
 	// 글 저장 혹은 수정 시 동영상 url 처리
 	public String videoUrl(String content) {
 		String[] video_url = {"https://www.youtube.com/watch?v=", 
