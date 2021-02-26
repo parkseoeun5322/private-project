@@ -4,6 +4,107 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="common.mapper">
+	<!-- 인기순 정렬 -->
+	<select id="populSortList" resultType="mypage.BoardVO">
+		select b.* from 
+			(select b.*, rownum board_rownum from 
+					(select b.* from 
+						(select bulpan_no board_no, board_category, bulpan_header board_header, bulpan_pushcnt board_pushcnt, bulpan_readcnt board_readcnt, bulpan_title board_title, bulpan_writedate board_writedate from bulpan
+						union
+						select drama_board_no, board_category, drama_board_header, drama_board_pushcnt, drama_board_readcnt, drama_board_title, drama_board_writedate from dramaboard 
+						union
+						select shopping_no, board_category, shopping_header, shopping_pushcnt, shopping_readcnt, shopping_title, shopping_writedate from shopping 
+						union
+						select review_no, board_category, review_header, review_pushcnt, review_readcnt, review_title, review_writedate from review 
+						union
+						select bluray_no, board_category, bluray_header, bluray_pushcnt, bluray_readcnt, bluray_title, bluray_writedate from bluray) b 
+					order by board_readcnt) b) b
+        where board_rownum between #{beginList} and #{endList}
+		order by board_rownum desc
+	</select>
+
+	<!-- 추천수 정렬 -->
+	<select id="pushSortList" resultType="mypage.BoardVO">
+		select b.* from 
+			(select b.*, rownum board_rownum from 
+					(select b.* from 
+						(select bulpan_no board_no, board_category, bulpan_header board_header, bulpan_pushcnt board_pushcnt, bulpan_readcnt board_readcnt, bulpan_title board_title, bulpan_writedate board_writedate from bulpan
+						union
+						select drama_board_no, board_category, drama_board_header, drama_board_pushcnt, drama_board_readcnt, drama_board_title, drama_board_writedate from dramaboard 
+						union
+						select shopping_no, board_category, shopping_header, shopping_pushcnt, shopping_readcnt, shopping_title, shopping_writedate from shopping 
+						union
+						select review_no, board_category, review_header, review_pushcnt, review_readcnt, review_title, review_writedate from review 
+						union
+						select bluray_no, board_category, bluray_header, bluray_pushcnt, bluray_readcnt, bluray_title, bluray_writedate from bluray) b 
+					order by board_pushcnt) b) b
+        where board_rownum between #{beginList} and #{endList}
+		order by board_rownum desc
+	</select>
+	
+	<select id="pushSortTotal" resultType="integer">
+		select count(*) from 
+			(select bulpan_no board_no, board_category, bulpan_header board_header, bulpan_pushcnt board_pushcnt, bulpan_readcnt board_readcnt, bulpan_title board_title, bulpan_writedate board_writedate from bulpan
+			union
+			select drama_board_no, board_category, drama_board_header, drama_board_pushcnt, drama_board_readcnt, drama_board_title, drama_board_writedate from dramaboard 
+			union
+			select shopping_no, board_category, shopping_header, shopping_pushcnt, shopping_readcnt, shopping_title, shopping_writedate from shopping 
+			union
+			select review_no, board_category, review_header, review_pushcnt, review_readcnt, review_title, review_writedate from review 
+			union
+			select bluray_no, board_category, bluray_header, bluray_pushcnt, bluray_readcnt, bluray_title, bluray_writedate from bluray)
+	</select>
+
+	<!-- 전체 검색 리스트 조회 -->
+	<select id="allSearchList" resultType="mypage.BoardVO">
+		select b.* from 
+			(select b.*, rownum board_rownum from 
+					(select b.* from 
+						(select bulpan_no board_no, board_category, bulpan_header board_header, bulpan_pushcnt board_pushcnt, bulpan_title board_title, bulpan_writedate board_writedate from bulpan 
+                        	where bulpan_header like '%' || #{keyword} || '%' or bulpan_title like '%' || #{keyword} || '%'
+						union
+						select drama_board_no, board_category, drama_board_header, drama_board_pushcnt, drama_board_title, drama_board_writedate from dramaboard 
+                        	where drama_board_header like '%' || #{keyword} || '%' or drama_board_title like '%' || #{keyword} || '%' or drama_board_content like '%' || #{keyword} || '%'
+						union
+						select shopping_no, board_category, shopping_header, shopping_pushcnt, shopping_title, shopping_writedate from shopping 
+                        	where shopping_header like '%' || #{keyword} || '%' or shopping_title like '%' || #{keyword} || '%' or shopping_content like '%' || #{keyword} || '%'
+						union
+						select review_no, board_category, review_header, review_pushcnt, review_title, review_writedate from review 
+                        	where review_header like '%' || #{keyword} || '%' or review_title like '%' || #{keyword} || '%' or review_content like '%' || #{keyword} || '%'
+						union
+						select bluray_no, board_category, bluray_header, bluray_pushcnt, bluray_title, bluray_writedate from bluray 
+                        	where bluray_header like '%' || #{keyword} || '%' or bluray_title like '%' || #{keyword} || '%' or bluray_content like '%' || #{keyword} || '%') b 
+					order by board_writedate) b) b
+		where board_rownum between #{beginList} and #{endList}			
+		order by board_rownum desc
+	</select>
+	
+	<!-- 댓글 수 -->
+	<select id="comment_cnt" resultType="integer">
+		select count(*) from board_comment  
+		where comment_bno = #{board_no} 
+		and comment_category = #{board_category} 
+	</select>
+	
+	<!-- 전체 검색 리스트 수 -->
+	<select id="allSearchTotal" resultType="integer">
+		select count(*) from 
+			(select bulpan_no board_no, board_category, bulpan_header board_header, bulpan_pushcnt board_pushcnt, bulpan_title board_title, bulpan_writedate board_writedate from bulpan 
+            	where bulpan_header like '%' || #{keyword} || '%' or bulpan_title like '%' || #{keyword} || '%'
+			union
+			select drama_board_no, board_category, drama_board_header, drama_board_pushcnt, drama_board_title, drama_board_writedate from dramaboard 
+                where drama_board_header like '%' || #{keyword} || '%' or drama_board_title like '%' || #{keyword} || '%' or drama_board_content like '%' || #{keyword} || '%'
+			union
+			select shopping_no, board_category, shopping_header, shopping_pushcnt, shopping_title, shopping_writedate from shopping 
+		        where shopping_header like '%' || #{keyword} || '%' or shopping_title like '%' || #{keyword} || '%' or shopping_content like '%' || #{keyword} || '%'
+			union
+			select review_no, board_category, review_header, review_pushcnt, review_title, review_writedate from review 
+		        where review_header like '%' || #{keyword} || '%' or review_title like '%' || #{keyword} || '%' or review_content like '%' || #{keyword} || '%'
+			union
+			select bluray_no, board_category, bluray_header, bluray_pushcnt, bluray_title, bluray_writedate from bluray 
+		        where bluray_header like '%' || #{keyword} || '%' or bluray_title like '%' || #{keyword} || '%' or bluray_content like '%' || #{keyword} || '%')		
+	</select>
+
 	<!-- 댓글 삭제 -->
 	<update id="comment_delete">
 		delete from board_comment where comment_no = #{comment_no}

@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mypage.BoardPage;
+import mypage.BoardVO;
+
 @Service
 public class CommonServiceImpl implements CommonServiceIF {
 	@Autowired CommonDAO dao;
@@ -47,6 +50,26 @@ public class CommonServiceImpl implements CommonServiceIF {
 	@Override
 	public int comment_delete(int comment_no) {
 		return dao.comment_delete(comment_no);
+	}
+
+	@Override
+	public BoardPage all_search(BoardPage page) {
+		return dao.all_search(page);
+	}
+
+	@Override
+	public int comment_cnt(BoardVO vo) {
+		return dao.comment_cnt(vo);
+	}
+
+	@Override
+	public BoardPage push_sort(BoardPage page) {
+		return dao.push_sort(page);
+	}
+
+	@Override
+	public BoardPage popul_sort(BoardPage page) {
+		return dao.popul_sort(page);
 	}
 
 }

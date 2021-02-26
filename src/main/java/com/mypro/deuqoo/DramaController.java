@@ -50,7 +50,7 @@ public class DramaController {
 	
 	//글 변경사항 수정 요청
 	@RequestMapping("/update.info")
-	public String update(DramaBoardVO vo, String myPage, Model model) {
+	public String update(DramaBoardVO vo, Model model) {
 		System.out.println(vo.getDrama_board_content());
 		vo.setDrama_board_content(common.videoUrl(vo.getDrama_board_content()));
 		// → 동영상 url 처리
@@ -60,26 +60,25 @@ public class DramaController {
 		
 		model.addAttribute("url", "detail.info");
 		model.addAttribute("drama_board_no", vo.getDrama_board_no());
-		model.addAttribute("myPage", myPage);
 		
 		return "drama/redirect";
 	}
 	
 	// 글 수정화면 요청
 	@RequestMapping("/modify.info")
-	public String modify(int drama_board_no, String myPage, Model model) {
+	public String modify(int drama_board_no, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.dramaboard_detail(drama_board_no));
 		model.addAttribute("less", "&lt;");
 		model.addAttribute("greater", "&gt;");
-		model.addAttribute("myPage", myPage);
 		
 		return "drama/info_modify";
 	}
 	
 	// 글 상세 정보 조회
 	@RequestMapping("/detail.info")
-	public String detail(int drama_board_no, String myPage, Model model, HttpSession session) {
+	public String detail(@RequestParam int drama_board_no, String returnList, String myPage,
+						Model model, HttpSession session) {
 		service.dramaboard_read(drama_board_no);		//조회수 증가
 		
 		PushVO pvo = new PushVO();
@@ -102,6 +101,12 @@ public class DramaController {
 		//선택한 방명록 글 정보를 DB에서 조회해와 상세화면에 출력
 		DramaBoardVO vo = new DramaBoardVO();
 		vo = service.dramaboard_detail(drama_board_no);
+		
+		// list 메소드를 거치지 않고 detail로 넘어온 경우 curPage를 1로 초기화함으로써
+		// page.jsp에 오류가 발생하지 않도록 한다.
+		if(returnList != null) {
+			page.setCurPage(1);
+		}
 		
 		model.addAttribute("vo", vo);
 		model.addAttribute("less", "&lt;");

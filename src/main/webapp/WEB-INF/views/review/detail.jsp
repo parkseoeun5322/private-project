@@ -128,12 +128,10 @@
 			</li>
 			<li>${fn:replace( fn:replace(vo.review_content, less, '<'), greater, '>') }</li>
 			<li>
-				<c:if test="${empty myPage }">
-					<div class="fl"><a onclick="$('form').submit()"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
-				<c:if test="${not empty myPage }">
+				<div class="fl"><a onclick="$('form').submit()"><i class="fas fa-bars"></i>목록</a></div>
+<%-- 				<c:if test="${not empty returnList }">
 					<div class="fl"><a href="list.re"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
+				</c:if> --%>
 				
 				<c:if test="${login_info ne null }">
 					<div class="fr">

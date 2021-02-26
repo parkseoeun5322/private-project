@@ -51,7 +51,7 @@ public class BlurayController {
 	
 	//글 변경사항 수정 요청
 	@RequestMapping("/update.bl")
-	public String update(BlurayVO vo, String myPage, Model model) {
+	public String update(BlurayVO vo, Model model) {
 		vo.setBluray_content(common.videoUrl(vo.getBluray_content()));
 		// → 동영상 url 처리
 		
@@ -60,25 +60,25 @@ public class BlurayController {
 		
 		model.addAttribute("url", "detail.bl");
 		model.addAttribute("bluray_no", vo.getBluray_no());
-		model.addAttribute("myPage", myPage);
+		
 		return "bluray/redirect";
 	}
 	
 	// 글 수정화면 요청
 	@RequestMapping("/modify.bl")
-	public String modify(int bluray_no, String myPage, Model model) {
+	public String modify(int bluray_no, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.bluray_detail(bluray_no));
 		model.addAttribute("less", "&lt;");
 		model.addAttribute("greater", "&gt;");
-		model.addAttribute("myPage", myPage);
 		
 		return "bluray/modify";
 	}
 	
 	// 글 상세 정보 조회
 	@RequestMapping("/detail.bl")
-	public String detail(int bluray_no, String myPage, Model model, HttpSession session) {
+	public String detail(@RequestParam int bluray_no, String returnList, String myPage, 
+						Model model, HttpSession session) {
 		service.bluray_read(bluray_no);		//조회수 증가
 				
 		PushVO pvo = new PushVO();
@@ -96,6 +96,12 @@ public class BlurayController {
 			svo.setScrap_category("블레");
 			svo.setScrap_id( ((MemberVO) session.getAttribute("login_info")).getMember_id() );
 			model.addAttribute("scrap", service.bluray_scrapList(svo));
+		}
+		
+		// list 메소드를 거치지 않고 detail로 넘어온 경우 curPage를 1로 초기화함으로써
+		// page.jsp에 오류가 발생하지 않도록 한다.
+		if(returnList != null) {
+			page.setCurPage(1);
 		}
 		
 		//선택한 방명록 글 정보를 DB에서 조회해와 상세화면에 출력

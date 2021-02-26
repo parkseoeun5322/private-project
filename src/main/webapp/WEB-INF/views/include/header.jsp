@@ -13,10 +13,16 @@
 			</c:if>
 			<c:if test="${!empty login_info }">
 				<li><a id="mypage"
-						onclick="$('#idForm').submit()">마이 페이지</a></li>
+						onclick="$('#idForm').submit();">마이 페이지</a></li>
 				<li><a onclick="go_logout()" style="cursor: pointer;">로그아웃</a></li>
 			</c:if>
-		</ul>	
+		</ul>
+		<form action="mypage" id="idForm" method="post">
+			<input type="hidden" name="curPage" value="1">
+			<c:if test="${not empty login_info }">
+				<input type="hidden" name="member_id" value="${login_info.member_id }">
+			</c:if>			
+		</form>			
 	</div>
 	<div class="category pt20">
 		<ul>
@@ -26,8 +32,10 @@
 			<li><a href="list.re" ${category eq 're' ? 'class="active"' : '' }>드라마 리뷰</a></li>
 			<li><a href="list.bl" ${category eq 'bl' ? 'class="active"' : '' }>블루레이 모집</a></li>
 			<li>
-				<input type="text" />
-				<!-- <span><i class="fas fa-search"></i></span> -->
+				<form action="all_search" id="idForm">
+					<input type="text" name="keyword" value="">					
+					<input type="hidden" name="curPage" value="1">
+				</form>
 			</li>
 		</ul>
 		<div id="dropdown">
@@ -37,10 +45,6 @@
 			</ul>
 		</div>
 	</div>
-	<form id="idForm" action="mypage" method="post">
-		<input type="hidden" name="curPage" value="1">
-		<input type="hidden" name="member_id" value="${login_info.member_id }">
-	</form>
 </header>
 <script type="text/javascript">
 function go_logout() {
@@ -105,10 +109,10 @@ $(function() {
 <style type="text/css">
 	header { margin: 0 auto; }
 	.main_info { background-color: #ffffff; position: relative; }
-	.main_info > ul:last-child { position: absolute; top: 20%; right: 15%; }
-	.main_info > ul:last-child > li { float: left; }
-	.main_info > ul:last-child > li:first-child { border-right: 1px solid #9e9e9e; }
-	.main_info > ul:last-child > li > a { color: #9e9e9e; font-size: 15px; padding: 0 10px; }
+	.main_info > ul:nth-child(2) { position: absolute; top: 20%; right: 15%; }
+	.main_info > ul:nth-child(2) > li { float: left; }
+	.main_info > ul:nth-child(2) > li:first-child { border-right: 1px solid #9e9e9e; }
+	.main_info > ul:nth-child(2) > li > a { color: #9e9e9e; font-size: 15px; padding: 0 10px; }
 	/* 메인 로고 */
 	.main_logo { width: 100px; margin: 0 auto; }
 	.main_logo > a { display: block; }
@@ -138,7 +142,7 @@ $(function() {
 		margin: -7px 0 0 15px;
 	}
 	
-	.category > ul > li:last-child > input { 
+	.category > ul > li:last-child input { 
 		background-color: #ededed; 
 		width: 100%; height: 35px; padding: 0 0 0 40px; border: 0;
 		background-image : url('img/search_black.png'); background-position:7px center; background-repeat:no-repeat; background-size: 28px;

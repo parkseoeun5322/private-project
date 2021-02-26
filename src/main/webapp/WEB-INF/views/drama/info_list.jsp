@@ -9,8 +9,8 @@
 </style>
 <script type="text/javascript">
 	function go_detail(no) {
-		$("[name=drama_board_no]").val(no);
-		$("form").attr("action", "detail.info");
+		//$("[name=drama_board_no]").val(no);
+		$("form").attr("action", "detail.info?drama_board_no=" + no);
 		$("form").submit();
 	}
 	
@@ -63,7 +63,6 @@
 			<input type="hidden" name="curPage" value="1">
 			<input type="hidden" name="header" value="">
 			<input type="hidden" name="division" value="">
-			<input type="hidden" name="drama_board_no">
 			<div>
 				<ul>
 					<li>

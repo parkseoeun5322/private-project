@@ -87,7 +87,7 @@
 		values(#{bluray_title}, #{bluray_content}, #{bluray_header}, #{bluray_writer}, #{bluray_division})
 	</insert>
 
-		<!-- 댓글 수 -->
+	<!-- 댓글 수 -->
 	<select id="comment_cnt" resultType="integer">
 		select count(*) from board_comment  
 		where comment_bno = #{bluray_no} 

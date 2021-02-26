@@ -1,5 +1,7 @@
 package com.mypro.deuqoo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +10,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import bluray.BlurayPage;
 import bluray.BlurayServiceImpl;
+import bluray.BlurayVO;
 import common.BoardCommentVO;
 import common.CommonServiceImpl;
 import common.PushVO;
 import common.ScrapVO;
 import drama.DramaBoardServiceImpl;
 import member.MemberVO;
+import mypage.BoardPage;
+import mypage.BoardVO;
 import review.ReviewServiceImpl;
-import review.ReviewVO;
 import shopping.ShoppingServiceImpl;
 
 @Controller
@@ -29,6 +35,74 @@ public class CommonController {
 	@Autowired DramaBoardServiceImpl dramaboard_service;
 	@Autowired BlurayServiceImpl bluray_service;
 	
+	@Autowired BoardPage page;
+	
+	//인기순 글 목록 화면 요청
+	@RequestMapping("/list.po")
+	public String list(HttpSession session, Model model,
+						@RequestParam(defaultValue = "10") int pageList, 
+						@RequestParam(defaultValue = "1") int curPage) {
+		
+		// DB에서 글 정보를 조회해와 목록화면에 출력
+		page.setCurPage(curPage);
+		page.setPageList(pageList);
+		
+		BoardPage list = common_service.popul_sort(page);
+		model.addAttribute("page", list);
+		
+		// 댓글 수 구하기
+		List<BoardVO> vo_list = list.getList();
+		for (BoardVO vo: vo_list) {
+			vo.setBoard_commentcnt(common_service.comment_cnt(vo));
+		}
+		
+		return "common/populSort_list";
+	} //list()
+	
+	//추천수 글 목록 화면 요청
+	@RequestMapping("/list.pu")
+	public String push_list(HttpSession session, Model model,
+						@RequestParam(defaultValue = "10") int pageList, 
+						@RequestParam(defaultValue = "1") int curPage) {
+		
+		// DB에서 글 정보를 조회해와 목록화면에 출력
+		page.setCurPage(curPage);
+		page.setPageList(pageList);
+		
+		BoardPage list = common_service.push_sort(page);
+		model.addAttribute("page", list);
+		
+		// 댓글 수 구하기
+		List<BoardVO> vo_list = list.getList();
+		for (BoardVO vo: vo_list) {
+			vo.setBoard_commentcnt(common_service.comment_cnt(vo));
+		}
+		
+		return "common/pushSort_list";
+	} //list()
+	
+	// 전체 검색
+	@RequestMapping("/all_search")
+	public String total_search(Model model, String keyword,
+								@RequestParam(defaultValue = "10") int pageList, 
+								@RequestParam(defaultValue = "1") int curPage) {
+		page.setCurPage(curPage);
+		page.setKeyword(keyword);
+		page.setPageList(pageList);
+		
+		BoardPage list = common_service.all_search(page);
+		
+		model.addAttribute("page", list);
+		
+		// 댓글 수 구하기
+		List<BoardVO> vo_list = list.getList();
+		for (BoardVO vo: vo_list) {
+			vo.setBoard_commentcnt(common_service.comment_cnt(vo));
+		}
+		
+		return "common/all_search";
+	}
+	
 	// 댓글 삭제 업데이트
 	@RequestMapping("/comment_delete")
 	public String delete(BoardCommentVO vo, String myPage, 
@@ -37,12 +111,12 @@ public class CommonController {
 		
 		common_service.comment_delete(vo.getComment_no());
 		
-		if(myPage != null) {
+		if(myPage != null) {	//마이페이지에서 댓글 삭제 시
 			model.addAttribute("url", "comment.my");
 			model.addAttribute("myPage", myPage);
 			model.addAttribute("member_id", member_id);
 			page = "mypage/redirect";
-		} else {
+		} else {	//글 상세 페이지의 댓글 목록에서 댓글 삭제 시
 			if(vo.getComment_category().equals("리뷰")) {
 				model.addAttribute("url", "detail.re");
 				model.addAttribute("review_no", vo.getComment_bno());

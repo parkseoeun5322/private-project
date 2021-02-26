@@ -50,7 +50,6 @@
 				</li>
 			</ul>
 			<input type="hidden" name="bluray_no" value="${vo.bluray_no }">
-			<input type="hidden" name="myPage" value="${myPage }">
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>

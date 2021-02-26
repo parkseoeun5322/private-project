@@ -12,5 +12,11 @@ public class BoardVO {
 	private String board_category;
 	private String board_title;
 	private Date board_writedate;
+	private String board_header;
+	private int board_pushcnt;
+	private int board_readcnt;
 	private int board_rownum;
+	private int board_commentcnt;
+	
+	private int rownum;
 }

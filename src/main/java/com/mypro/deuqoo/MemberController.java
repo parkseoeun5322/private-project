@@ -291,24 +291,23 @@ public class MemberController {
 				// DB에서 조회해와 세션에 담는다.
 				session.setAttribute("login_info", vo);
 			}
-		}
-		
-		// 최근 로그인 날짜 업데이터
-		Date currentDate = new Date(System.currentTimeMillis());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		String db_date = sdf.format(vo.getMember_recent_login_date());
-		String cu_date = sdf.format(currentDate);
-		
-		if (!db_date.equals(cu_date)) {
-			vo.setMember_recent_login_date(currentDate);
+			// 최근 로그인 날짜 업데이터
+			Date currentDate = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			String db_date = sdf.format(vo.getMember_recent_login_date());
+			String cu_date = sdf.format(currentDate);
 			
-			if (service.update_loginDate(vo) > 0) {
-				System.out.println("최근 로그인 날짜 업데이트 성공");
-			} else {
-				System.out.println("최근 로그인 날짜 업데이트 실패");
+			if (!db_date.equals(cu_date)) {
+				vo.setMember_recent_login_date(currentDate);
+				
+				if (service.update_loginDate(vo) > 0) {
+					System.out.println("최근 로그인 날짜 업데이트 성공");
+				} else {
+					System.out.println("최근 로그인 날짜 업데이트 실패");
+				}
 			}
 		}
-
+		
 		return vo;
 		// 화면을 넘기는 것이 아니라 ajax로 통신한 쪽(header.jsp)으로 데이터를 가지고 오기만 하면 된다.
 	} // login()

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,7 +48,7 @@ public class ReviewController {
 	
 	//리뷰 글 변경사항 수정 요청
 	@RequestMapping("/update.re")
-	public String update(ReviewVO vo, String myPage, Model model) {
+	public String update(ReviewVO vo, Model model) {
 		vo.setReview_content(common.videoUrl(vo.getReview_content()));
 		// → 동영상 url 처리
 		
@@ -63,14 +64,13 @@ public class ReviewController {
 		
 		model.addAttribute("url", "detail.re");
 		model.addAttribute("review_no", vo.getReview_no());
-		model.addAttribute("myPage", myPage);
 		
 		return "review/redirect";
 	}
 	
 	//리뷰 글 수정화면 요청
 	@RequestMapping("/modify.re")
-	public String modify(int review_no, String myPage, Model model) {
+	public String modify(int review_no, Model model) {
 		//선택한 방명록 정보를 DB에서 조회해와 수정화면에 출력
 		model.addAttribute("vo", service.review_detail(review_no));
 		model.addAttribute("less", "&lt;");
@@ -81,7 +81,8 @@ public class ReviewController {
 	
 	// 리뷰 글 상세정보 조회
 	@RequestMapping("/detail.re")
-	public String detail(int review_no, String myPage, Model model, HttpSession session) {
+		public String detail(@RequestParam int review_no, String returnList, String myPage,
+							Model model, HttpSession session) {
 		service.review_read(review_no);		//조회수 증가
 		
 		PushVO pvo = new PushVO();
@@ -99,6 +100,13 @@ public class ReviewController {
 			svo.setScrap_category("리뷰");
 			svo.setScrap_id( ((MemberVO) session.getAttribute("login_info")).getMember_id() );
 			model.addAttribute("scrap", service.review_scrapList(svo));
+		}
+		
+		// list 메소드를 거치지 않고 detail로 넘어온 경우 curPage를 1로 초기화함으로써
+		// page.jsp에 오류가 발생하지 않도록 한다.
+		if(returnList != null) {
+			System.out.println("returnList");
+			page.setCurPage(1);
 		}
 		
 		//선택한 방명록 글 정보를 DB에서 조회해와 상세화면에 출력

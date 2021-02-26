@@ -9,8 +9,8 @@
 </style>
 <script type="text/javascript">
 	function go_detail(no) {
-		$("[name=bluray_no]").val(no);
-		$("form").attr("action", "detail.bl");
+		//$("[name=bluray_no]").val(no);
+		$("form").attr("action", "detail.bl?bluray_no=" + no);
 		$("form").submit();
 	}
 	
@@ -63,7 +63,6 @@
 			<input type="hidden" name="curPage" value="1">
 			<input type="hidden" name="header" value="">
 			<input type="hidden" name="division" value="">
-			<input type="hidden" name="bluray_no">
 			<div>
 				<ul>
 					<li>

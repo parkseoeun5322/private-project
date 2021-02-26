@@ -127,12 +127,7 @@
 			</li>
 			<li>${fn:replace( fn:replace(vo.shopping_content, less, '<'), greater, '>') }</li>
 			<li>
-				<c:if test="${empty myPage }">
-					<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
-				<c:if test="${not empty myPage }">
-					<div class="fl"><a href="list.tv"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
+				<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
 				
 				<c:if test="${login_info ne null }">
 					<div class="fr">

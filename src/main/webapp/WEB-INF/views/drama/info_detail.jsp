@@ -128,12 +128,7 @@
 			</li>
 			<li>${fn:replace( fn:replace(vo.drama_board_content, less, '<'), greater, '>') }</li>
 			<li>
-				<c:if test="${empty myPage }">
-					<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
-				<c:if test="${not empty myPage }">
-					<div class="fl"><a href="list.info"><i class="fas fa-bars"></i>목록</a></div>
-				</c:if>
+				<div class="fl"><a onclick="$('#pageForm').submit()"><i class="fas fa-bars"></i>목록</a></div>
 				
 				<c:if test="${login_info ne null }">
 					<div class="fr">
@@ -163,7 +158,10 @@
 			<input type="hidden" name="search" value="${page.search }" />
 			<input type="hidden" name="keyword" value="${page.keyword }" />
 			<input type="hidden" name="pageList" value="${page.pageList }" />
-			<input type="hidden" name="myPage" value="${myPage }" />
+			<input type="hidden" name="myPage" value="${myPage }" />	
+			<!-- 1. 글 삭제 시, 해당 글 목록으로 돌아갈 때
+				 2. 글 삭제 시, 마이페이지 작성글 목록으로 돌아갈때(myPage로 구분) 
+			 -->
 		</form>
 			<c:if test="${login_info ne null }">
 				<div class="comment_wrap">

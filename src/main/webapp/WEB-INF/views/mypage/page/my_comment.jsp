@@ -46,7 +46,7 @@
 	</div>	<!-- .data-list -->
 	<form id="commentForm" action="comment_delete" method="post">
 		<input type="hidden" name="comment_no" value="">
-		<input type="hidden" name="myPage" value="Y">
+		<input type="hidden" name="returnList" value="Y">
 		<input type="hidden" name="member_id" value="${login_info.member_id }">
 	</form>
 	<div class="pageSet">

@@ -50,7 +50,7 @@
 				</li>
 			</ul>
 			<input type="hidden" name="drama_board_no" value="${vo.drama_board_no }">
-			<input type="hidden" name="myPage" value="${myPage }">
+			<input type="hidden" name="returnList" value="${returnList }">
 		</form>
 		<div class="btnSet">
 			<a class="btn-fill" id="saveBtn" onclick="if( necessary() ) { $('form').submit() }">등록</a>

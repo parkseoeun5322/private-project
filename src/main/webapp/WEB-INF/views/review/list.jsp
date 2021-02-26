@@ -9,8 +9,7 @@
 </style>
 <script type="text/javascript" charset="utf-8">
 	function go_detail(no) {
-		$("[name=review_no]").val(no);
-		$("form").attr("action", "detail.re");
+		$("form").attr("action", "detail.re?review_no=" + no);
 		$("form").submit();
 	}
 
@@ -50,6 +49,7 @@
 					<td>${vo.board_category }</td>
 					<td>
 						<a onclick="go_submit('${vo.review_header }')">${vo.review_header }</a>)
+<%-- 						<a class="mr10" href="javascript:go_detail(${vo.review_no })">${vo.review_title }</a> --%>
 						<a class="mr10" href="javascript:go_detail(${vo.review_no })">${vo.review_title }</a>
 						<span style="font-weight: 900;">${vo.review_commentcnt }</span>
 					</td>
@@ -64,7 +64,6 @@
 			<input type="hidden" name="curPage" value="1">
 			<input type="hidden" name="header" value="">
 			<input type="hidden" name="division" value="">
-			<input type="hidden" name="review_no">
 			<div>
 				<ul>
 					<li>
