@@ -52,6 +52,9 @@ public class HomeController {
 		
 		model.addAttribute("drama", common.ingDrama_crawling());
 		model.addAttribute("drama_size", (common.ingDrama_crawling()).size());
+		
+		//model.addAttribute("drama", common.selenium_crawling());
+		//model.addAttribute("drama_size", (common.selenium_crawling()).size());
 				
 		return "home";
 	}

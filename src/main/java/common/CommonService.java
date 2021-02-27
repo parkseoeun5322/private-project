@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.mail.HtmlEmail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -17,6 +24,63 @@ import member.MemberVO;
 
 @Service
 public class CommonService {
+	
+	public List<String> selenium_crawling() {
+		//WebDriver 설정
+		WebDriver driver;
+		List<WebElement> elements;
+		WebElement element;
+		List<String> list = new ArrayList<>();
+		String[] replace = {"\\\\", "\\/", "\\:", "\\?", "\\\"", "\\<", "\\>", "\\|"};
+		String[] characters = {"\\", "/", ":", "?", "\"", "<", ">", "|"};
+		
+		//Properties 설정
+		String WEB_DRIVER_ID = "webdriver.chrome.driver";
+		String WEB_DRIVER_PATH = "C:\\Users\\qazpl\\Desktop\\JAVA\\개발자프로그램\\chromedriver_win32\\chromedriver.exe";
+		
+		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
+		
+		//Driver SetUp
+		ChromeOptions options = new ChromeOptions();
+		options.setCapability("ignoreProtectedModeSettings", true);
+		options.addArguments("--headless"); 
+		options.addArguments("--no-sandbox");
+		driver = new ChromeDriver(options);
+		
+		String naverUrl = "https://search.naver.com/search.naver";
+		String onairUrl = "?sm=tab_hty.top&where=nexearch&query=드라마&oquery=방영중한국드라마&tqi=hu6q0sprvTossj4s6rGssssstW4-400427";
+		
+		try {
+			driver.get(naverUrl + onairUrl);
+			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+			Thread.sleep(5000);
+			element = driver.findElement(By.xpath("//*[@id=\"mflick\"]/div/div[1]/ul[2]"));
+			JavascriptExecutor executor = (JavascriptExecutor)driver;
+		    executor.executeScript("arguments[0].removeAttribute('style')", element);
+			//elements = driver.findElements(By.xpath("//*[@class='list_info']/li/strong/a"));
+			elements = driver.findElements(By.cssSelector("a._text"));
+			
+			for (WebElement ele : elements) {
+				// 속성의 NodeText를 전부 출력한다.
+				list.add(ele.getAttribute("textContent"));
+			}
+			
+			for (int i = 0; i < list.size(); i++) {
+				for (int j = 0; j < characters.length; j++) {
+					if(list.get(i).contains(characters[j])) {
+						list.set(i, list.get(i).replaceAll(replace[j], ""));
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			driver.quit();
+		}
+		
+		return list;
+	}
 	
 	//방영중 드라마 정보 크롤링 및 DB 업데이트
 	public List<String> ingDrama_crawling() {
@@ -27,7 +91,6 @@ public class CommonService {
 		Document doc = null;
 		String[] replace = {"\\\\", "\\/", "\\:", "\\?", "\\\"", "\\<", "\\>", "\\|"};
 		String[] characters = {"\\", "/", ":", "?", "\"", "<", ">", "|"};
-		String text1 = "", text2 = "";
 		
 		try {
 			doc = Jsoup.connect(naverUrl + onairUrl).get();
