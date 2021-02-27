@@ -7,8 +7,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
-	function comment_delete(no) {
+	function comment_delete(no, category) {
 		$("[name=comment_no]").val(no);
+		$("[name=comment_category]").val(category);
 		$("#commentForm").submit();
 	}
 </script>
@@ -39,15 +40,17 @@
 						<td>${vo.comment_title }</td>
 					</c:if>
 					<td><fmt:formatDate value="${vo.comment_writedate }" pattern="yyyy-MM-dd"/></td>
-					<td><a class="my_delete" style="margin: 0 0 0 3px;" onclick="comment_delete(${vo.comment_no})">삭제</a></td>
+					<td><a class="my_delete" style="margin: 0 0 0 3px;" onclick="comment_delete(${vo.comment_no}, '${vo.comment_category }')">삭제</a></td>
 				</tr>
 			</c:forEach>
 		</table>
 	</div>	<!-- .data-list -->
 	<form id="commentForm" action="comment_delete" method="post">
 		<input type="hidden" name="comment_no" value="">
+		<input type="hidden" name="comment_category" value="">
 		<input type="hidden" name="returnList" value="Y">
 		<input type="hidden" name="member_id" value="${login_info.member_id }">
+		<input type="hidden" name="myPage" value="Y">
 	</form>
 	<div class="pageSet">
 		<jsp:include page="/WEB-INF/views/include/page.jsp"/>

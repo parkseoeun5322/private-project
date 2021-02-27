@@ -178,7 +178,7 @@
 		</div> <!-- .post_wrap -->
 		<div class="post_wrap" style="border: 1px solid #ddd; padding: 20px 10px;">
 			<div class="post_title">
-				<a class="btn-fill" style="margin-left: 10px;" href="list.so">방영중인 드라마</a>
+				<a class="btn-fill" style="margin-left: 10px;" href="list.dr">방영중인 드라마</a>
 			</div>
 			<div id="poster_btn">
 				<button class="prev_btn" id="poster_prev_btn"></button>

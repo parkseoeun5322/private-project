@@ -35,12 +35,12 @@ public class ShoppingController {
 		String member_id = ((MemberVO)session.getAttribute("login_info")).getMember_id();
 		
 		// 마이페이지에서 상세 페이지로 넘어왔을 경우
-		if(myPage != null) {
-			model.addAttribute("url", "document.my");
-			model.addAttribute("member_id", member_id);
-		} else {
+		if(myPage == null || myPage.equals("")) {
 			model.addAttribute("page", page);
 			model.addAttribute("url", "list.tv");
+		} else {
+			model.addAttribute("url", "document.my");
+			model.addAttribute("member_id", member_id);
 		}
 		
 		return "shopping/redirect";
