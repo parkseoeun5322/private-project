@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import SingleComment from './SingleComment'
+import ReplyComment from './ReplyComment'
 
 function Comment(props) {
     let {movieId} = useParams()
@@ -47,8 +48,19 @@ function Comment(props) {
 
             {/* Comment Lists */}
             {props.commentLists && props.commentLists.map((comment, index) => (
-                (!comment.responseTo && 
-                    <SingleComment refreshFunction={props.refreshFunction} comment={comment} movieId={movieId}  />
+                (!comment.responseTo &&
+                    <React.Fragment>
+                        <SingleComment 
+                            refreshFunction={props.refreshFunction} 
+                            comment={comment} 
+                            movieId={movieId}  
+                        />
+                        <ReplyComment 
+                            refreshFunction={props.refreshFunction}
+                            parentCommentId={comment._id} 
+                            movieId={movieId} 
+                            commentLists={props.commentLists} />
+                    </React.Fragment> 
                 )
             ))}
 

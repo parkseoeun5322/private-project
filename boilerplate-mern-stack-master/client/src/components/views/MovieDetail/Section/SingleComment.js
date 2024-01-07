@@ -16,7 +16,7 @@ function SingleComment(props) {
     }
 
     const onHandleChange = (event) => {
-        setCommentValue(event.currentTarget.CommentValue)
+        setCommentValue(event.currentTarget.value)
     }
 
     const onSubmit = (event) => {
@@ -32,6 +32,7 @@ function SingleComment(props) {
             .then(response => {
                 if(response.data.success) {
                     setCommentValue("")
+                    setOpenReply(false)
                     props.refreshFunction(response.data.result)
                 } else {
                     alert('댓글을 저장하는 데 실패했습니다!')
