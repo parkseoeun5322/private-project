@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mapper 태그를 사용하기 위한 코드 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bluray.mapper">
+	<!-- 글 삭제 처리 -->
+	<delete id="delete">
+		delete from bluray where bluray_no = #{bluray_no}
+	</delete>
+
+	<!-- 글 수정 -->
+	<update id="update">
+		update bluray set bluray_header = #{bluray_header}, 
+			bluray_division = #{bluray_division},
+			bluray_title = #{bluray_title},
+			bluray_content = #{bluray_content}
+		where bluray_no = #{bluray_no}
+	</update>
+
+	<!-- 스크랩 취소 처리 -->
+	<delete id="scrapDelete">
+		delete from scrap where scrap_no = #{scrap_no}
+	</delete>
+	<update id="scrapCancel">
+		update bluray set bluray_scrapcnt = bluray_scrapcnt - 1 
+		where bluray_no = #{scrap_boardNo}
+	</update>
+
+	<!-- 스크랩 처리 -->
+	<insert id="scrapInsert">
+		insert into scrap(scrap_boardNo, scrap_id, scrap_category, scrap_title)
+		values(#{scrap_boardNo}, #{scrap_id}, #{scrap_category}, #{scrap_title})
+	</insert>
+	<update id="scrap">
+		update bluray set bluray_scrapcnt = bluray_scrapcnt + 1 
+		where bluray_no = #{scrap_boardNo}
+	</update>	
+
+	<!-- 추천 취소 처리 -->
+	<delete id="pushDelete">
+		delete from push where push_no = #{push_no}
+	</delete>
+	<update id="pushCancel">
+		update bluray set bluray_pushcnt = bluray_pushcnt - 1 where bluray_no = #{push_boardNo}
+	</update>
+
+	<!-- 추천 수 증가 처리 -->
+	<insert id="pushInsert">
+		insert into push(push_boardNo, push_id, push_category)
+		values(#{push_boardNo}, #{push_id}, #{push_category})
+	</insert>
+	<update id="push">
+		update bluray set bluray_pushcnt = bluray_pushcnt + 1 
+		where bluray_no = #{push_boardNo}
+	</update>
+
+	<!-- TV 속 이 상품 글 상세 조회 -->
+	<select id="scrapList" resultType="common.ScrapVO">
+		select * from scrap 
+		where scrap_boardNo = #{scrap_boardNo} 
+		and scrap_id = #{scrap_id}
+		and scrap_category = #{scrap_category}		
+	</select>
+	<select id="pushList" resultType="common.PushVO">
+		select * from push 
+		where push_boardNo = #{push_boardNo} 
+		and push_id = #{push_id}
+		and push_category = #{push_category}
+	</select>
+	<select id="detail" resultType="bluray.BlurayVO">
+        select r.*, 
+        	(select count(*) from board_comment 
+        	where comment_bno = #{bluray_no}
+        	and comment_category = '블레') bluray_commentcnt
+        from bluray r where bluray_no = #{bluray_no}
+	</select>
+
+	<!-- 글 조회수 증가 -->
+	<update id="read">
+		update bluray set bluray_readcnt = bluray_readcnt + 1 where bluray_no = #{bluray_no}
+	</update>
+
+	 <!-- 블루레이 글 저장 -->
+	<insert id="insert">
+		insert into bluray(bluray_title, bluray_content, bluray_header, bluray_writer, bluray_division) 
+		values(#{bluray_title}, #{bluray_content}, #{bluray_header}, #{bluray_writer}, #{bluray_division})
+	</insert>
+
+	<!-- 댓글 수 -->
+	<select id="comment_cnt" resultType="integer">
+		select count(*) from board_comment  
+		where comment_bno = #{bluray_no} 
+		and comment_category = #{board_category} 
+	</select>
+
+	<!-- 글 분류 처리 -->
+	 <select id="divList" resultType="bluray.BlurayVO">
+	 	select n.* from
+		 	(select n.*, rownum bluray_rownum from
+			 	(select * from bluray
+			 	where bluray_division = #{division}
+			 	order by bluray_no) n
+			 order by bluray_rownum desc) n
+		where bluray_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="divTotal" resultType="integer">
+	 	select count(*) from bluray
+	 	where bluray_division = #{division}
+	 </select>
+
+	 <!-- 말머리 검색 후 목록 조회 -->
+	 <select id="headerList" resultType="bluray.BlurayVO">
+	 	select n.* from
+		 	(select n.*, rownum bluray_rownum from
+			 	(select * from bluray
+			 	where bluray_header = #{header}
+			 	order by bluray_no) n
+			 order by bluray_rownum desc) n
+		where bluray_rownum between #{beginList} and #{endList}
+	 </select>
+	 <select id="headerTotal" resultType="integer">
+	 	select count(*) from bluray
+	 	where bluray_header = #{header}
+	 </select>
+
+	<sql id="search_where">
+		<if test="search == 'bluray_title' or search == 'bluray_content'">
+			where ${search}
+			like '%' || #{keyword} || '%'
+		</if>
+		<if test="search == 'all'">
+			where bluray_title like '%' || #{keyword} || '%'
+			or bluray_content like '%' || #{keyword} || '%'
+		</if>
+	</sql>
+	 
+	 <!-- 각 페이지에 출력할 목록 조회 -->
+	 <select id="list" resultType="bluray.BlurayVO">
+	 	select n.* from
+		 	(select n.*, rownum bluray_rownum from
+			 	(select * from bluray
+			 	<include refid="search_where"/>
+			 	order by bluray_no) n
+			 order by bluray_rownum desc) n
+		where bluray_rownum between #{beginList} and #{endList}
+	 </select>
+	 
+	 <!-- 페이징 처리를 위한 검색 조건에 해당하는 글 목록 건수 조회 -->
+	 <select id="total" resultType="integer">
+	 	select count(*) from bluray
+	 	<include refid="search_where" />
+	 </select>
+</mapper>

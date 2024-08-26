@@ -1,0 +1,268 @@
+------------------------------- Bulpan 테이블
+
+create table bulpan(
+    bulpan_no number constraint board_no_pk primary key not null,
+    board_category varchar2(20) default '불판' not null,
+    bulpan_title varchar2(300) not null,
+    bulpan_content varchar2(4000),
+    bulpan_header varchar2(100),
+    bulpan_division varchar2(20),
+    bulpan_writer varchar2(20) not null,
+    bulpan_writedate date default sysdate not null,
+    bulpan_readcnt number default 0,
+    bulpan_pushcnt number default 0,
+    bulpan_filename varchar2(300),
+    bulpan_filepath varchar2(300),
+    constraint bulpan_writer_fk FOREIGN KEY(bulpan_writer) REFERENCES member(member_id)  on delete CASCADE
+);
+
+CREATE SEQUENCE seq_bulpan START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_bulpan
+    BEFORE INSERT on bulpan
+    FOR EACH ROW
+BEGIN
+    SELECT seq_bulpan.nextval into :new.bulpan_no from dual;
+END;
+/
+
+commit;
+
+
+-------------------------------- Chatting 테이블
+CREATE TABLE chatting (
+    chatting_id VARCHAT2(50) CONSTRAINT chatting_no_pk PRIMARY KEY,
+    chatting_no NUMBER
+    chatting_writer VARCHAR2(20),
+    chatting_time DATE DEFAULT sysdate,
+    chatting_content VARCHAR2(4000),
+    chatting_roomNo NUMBER,
+    CONSTRAINT chatting_writer_fk FOREIGN KEY(chatting_writer) REFERENCES member(member_id)  on delete CASCADE,
+    CONSTRAINT chatting_roomNo_fk FOREIGN KEY(chatting_roomNo) REFERENCES bulpan(bulpan_no) ON DELETE CASCADE
+);
+
+ALTER TABLE chatting ADD chatting_nickname NUMBER;
+
+commit;
+
+
+-------------------------------- Review 테이블
+create table review(
+    review_no number constraint review_no_pk primary key not null,
+    review_category varchar2(20) default '리뷰' not null,
+    review_title varchar2(300) not null,
+    review_content varchar2(4000),
+    review_header varchar2(100),
+    review_division varchar2(20),
+    review_writer varchar2(20) not null,
+    review_writedate date default sysdate not null,
+    review_readcnt number default 0,
+    review_pushcnt number default 0,
+    review_filename varchar2(300),
+    review_filepath varchar2(300),
+    constraint review_writer_fk FOREIGN KEY(review_writer) REFERENCES member(member_id)  on delete CASCADE
+);
+
+CREATE SEQUENCE seq_review START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_review
+    BEFORE INSERT on review
+    FOR EACH ROW
+BEGIN
+    SELECT seq_review.nextval into :new.review_no from dual;
+END;
+/
+
+ALTER TABLE review ADD review_scrapcnt number default 0;
+
+--varchar2(4000) 용량 문제
+ALTER TABLE review DROP COLUMN review_content;
+ALTER TABLE review ADD (review_content CLOB); 
+
+--컬럼명 변경
+ALTER TABLE review RENAME COLUMN review_category TO board_category;
+
+COMMIT;
+
+-------------------------------- Push 테이블
+
+create table push(
+    push_no number constraint push_no_pk primary key not null,
+    push_boardNo number not null,
+    push_id varchar2(20) not null,
+    constraint push_boardNo_r_fk FOREIGN KEY(push_boardNo) REFERENCES review(review_no)  on delete CASCADE,
+    constraint push_id_fk FOREIGN KEY(push_id) REFERENCES member(member_id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE seq_push START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_push
+    BEFORE INSERT on push
+    FOR EACH ROW
+BEGIN
+    SELECT seq_push.nextval into :new.push_no from dual;
+END;
+/
+
+ALTER TABLE push ADD push_category varchar2(20) not null;	//컬럼 추가
+
+ALTER TABLE push ADD CONSTRAINT push_boardNo_s_fk FOREIGN KEY(push_boardNo) 
+REFERENCES shopping(shopping_no)  ON DELETE CASCADE;			//제약조건 추가(shopping)
+
+ALTER TABLE push DROP CONSTRAINT push_boardNo_r_fk;		//제약조건 제거
+ALTER TABLE push DROP CONSTRAINT push_boardNo_s_fk;		//제약조건 제거
+// 외래키 제약조건을 두개 이상 걸어줄 경우, insert 시, 두개 이상의 제약조건이 모두 충족되어야만(교집합) insert가 가능하다.
+
+commit;
+
+-------------------------------- Scrap 테이블
+
+create table scrap(
+    scrap_no number constraint scrap_no_pk primary key not null,
+    scrap_boardNo number not null,
+    scrap_id varchar2(20) not null,
+    scrap_date date default sysdate,
+    scrap_title varchar2(300) not null,
+    scrap_category varchar2(20) not null,
+    constraint scrap_boardNo_r_fk FOREIGN KEY(scrap_boardNo) REFERENCES review(review_no)  on delete CASCADE,
+    constraint scrap_id_fk FOREIGN KEY(scrap_id) REFERENCES member(member_id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE seq_scrap START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_scrap
+    BEFORE INSERT on scrap
+    FOR EACH ROW
+BEGIN
+    SELECT seq_scrap.nextval into :new.scrap_no from dual;
+END;
+/
+
+ALTER TABLE scrap ADD CONSTRAINT scrap_boardNo_s_fk FOREIGN KEY(scrap_boardNo) 
+REFERENCES shopping(shopping_no) ON DELETE CASCADE;		//제약조건 추가(scrap)
+
+ALTER TABLE scrap DROP CONSTRAINT scrap_boardNo_r_fk;	//제약조건 제거
+ALTER TABLE scrap DROP CONSTRAINT scrap_boardNo_s_fk;	//제약조건 제거
+
+commit;
+
+-------------------------------- Board_Comment 테이블
+
+create table board_comment (
+	comment_no number constraint board_comment_no_pk primary key,
+	comment_bno number
+		constraint board_comment_bno_fk references review(review_no) on delete cascade,	
+	comment_writer varchar2(20)	
+		constraint board_comment_writer_fk references member(member_id) on delete cascade,
+	comment_content clob,
+	comment_writedate date default sysdate,
+    comment_writetime varchar2(10),
+    comment_category varchar2(20)
+);
+
+CREATE SEQUENCE seq_comment START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_comment
+    BEFORE INSERT on board_comment
+    FOR EACH ROW
+BEGIN
+    SELECT seq_comment.nextval into :new.comment_no from dual;
+END;
+/
+
+ALTER TABLE board_comment ADD comment_root number;
+ALTER TABLE board_comment ADD comment_step number default 0;
+ALTER TABLE board_comment ADD comment_reply varchar2(1) default 'N';
+
+ALTER TABLE board_comment DROP CONSTRAINT board_comment_bno_fk;		//제약조건 제거
+
+commit;
+
+-------------------------------- Shopping 테이블
+create table shopping(
+    shopping_no number constraint shopping_no_pk primary key not null,
+    shopping_category varchar2(20) default '상품' not null,
+    shopping_title varchar2(300) not null,
+    shopping_content clob,
+    shopping_header varchar2(100),
+    shopping_division varchar2(20),
+    shopping_writer varchar2(20) not null,
+    shopping_writedate date default sysdate not null,
+    shopping_readcnt number default 0,
+    shopping_pushcnt number default 0,
+    shopping_scrapcnt number default 0,
+    constraint shopping_writer_fk FOREIGN KEY(shopping_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+ALTER TABLE shopping RENAME COLUMN shopping_category TO board_category;
+
+CREATE SEQUENCE seq_shopping START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_shopping
+    BEFORE INSERT on shopping
+    FOR EACH ROW
+BEGIN
+    SELECT seq_shopping.nextval into :new.shopping_no from dual;
+END;
+/
+
+commit;
+
+-------------------------------- DramaBoard 테이블
+
+create table dramaboard(
+    drama_board_no number constraint drama_board_no_pk primary key not null,
+    drama_board_category varchar2(20) default '자료' not null,
+    drama_board_title varchar2(300) not null,
+    drama_board_content clob,
+    drama_board_header varchar2(100),
+    drama_board_division varchar2(20),
+    drama_board_writer varchar2(20) not null,
+    drama_board_writedate date default sysdate not null,
+    drama_board_readcnt number default 0,
+    drama_board_pushcnt number default 0,
+    drama_board_scrapcnt number default 0,
+    constraint drama_board_writer_fk FOREIGN KEY(drama_board_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+ALTER TABLE dramaboard RENAME COLUMN drama_board_category TO board_category;
+
+CREATE SEQUENCE seq_drama_board START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_drama_board
+    BEFORE INSERT on dramaboard
+    FOR EACH ROW
+BEGIN
+    SELECT seq_drama_board.nextval into :new.drama_board_no from dual;
+END;
+/
+
+commit;
+
+-------------------------------- Bluray 테이블
+create table bluray(
+    bluray_no number constraint bluray_no_pk primary key not null,
+    board_category varchar2(20) default '블레' not null,
+    bluray_title varchar2(300) not null,
+    bluray_content clob,
+    bluray_header varchar2(100),
+    bluray_division varchar2(20),
+    bluray_writer varchar2(20) not null,
+    bluray_writedate date default sysdate not null,
+    bluray_readcnt number default 0,
+    bluray_pushcnt number default 0,
+    bluray_scrapcnt number default 0,
+    constraint bluray_writer_fk FOREIGN KEY(bluray_writer) REFERENCES member(member_id) on delete CASCADE
+);
+
+CREATE SEQUENCE seq_bluray START WITH 1 INCREMENT by 1;
+
+CREATE OR REPLACE TRIGGER trg_bluray
+    BEFORE INSERT on bluray
+    FOR EACH ROW
+BEGIN
+    SELECT seq_bluray.nextval into :new.bluray_no from dual;
+END;
+/
+
+commit;

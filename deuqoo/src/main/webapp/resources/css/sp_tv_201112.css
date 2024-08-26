@@ -1,0 +1,239 @@
+@charset "UTF-8";
+
+.sp_tv .sptv, .sp_tv .sptv_af:after, .sp_tv .sptv_bf:before {
+	display: inline-block;
+	overflow: hidden;
+	color: transparent;
+	white-space: nowrap;
+	vertical-align: top;
+	background:
+		url(https://ssl.pstatic.net/sstatic/search/pc/img/sp_tv_in_product_34ec7baa.png)
+		0 0 no-repeat;
+	background-size: 10px 6px
+}
+
+.sp_tv .sptv_af:after, .sp_tv .sptv_bf:before {
+	content: ''
+}
+
+.sp_tv .group_tv {
+	padding: 5px 20px 17px;
+	font-size: 1.3rem;
+	line-height: 2rem
+}
+
+.sp_tv .group_tv .title_area {
+	position: relative;
+	padding-top: 2px;
+	line-height: 3.6rem
+}
+
+.sp_tv .group_tv .title_area:after {
+	content: '';
+	display: block;
+	clear: both
+}
+
+.sp_tv .group_tv .title_area .title {
+	font-size: 1.4rem
+}
+
+.sp_tv .group_tv .title_area .title .link {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 100%;
+	vertical-align: top
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap {
+	margin: -6px -20px 0;
+	border-bottom: 1px solid #f1f4f6
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .api_pcpg_wrap {
+	margin-bottom: -1px
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .flick_bx:first-child .item
+	{
+	margin-left: 10px
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .flick_bx:last-child .item
+	{
+	margin-right: 10px
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .item {
+	display: block;
+	height: 37px;
+	padding: 0 10px;
+	font-size: 1.3rem;
+	line-height: 37px;
+	color: #202020;
+	letter-spacing: -.25px;
+	white-space: nowrap;
+	text-decoration: none
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .item .txt {
+	display: block;
+	position: relative
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .item[aria-selected=true]
+	{
+	font-weight: 700;
+	color: #03c75a
+}
+
+.sp_tv .group_tv .tv_tab_scroll_wrap .list_tab .item[aria-selected=true] .txt:before
+	{
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 1px;
+	background-color: #03c75a
+}
+
+.sp_tv .group_tv .tv_recommend_wrap {
+	margin: 0 -6px;
+	padding: 18px 0
+}
+
+.sp_tv .group_tv .tv_recommend_list .inner_item {
+	display: inline-block;
+	width: 25%;
+	vertical-align: top;
+	text-align: center
+}
+
+.sp_tv .group_tv .tv_recommend_list .item {
+	display: inline-block;
+	width: 82px;
+	font-size: 1.3rem;
+	line-height: 1.7rem;
+	color: #202020;
+	letter-spacing: -.25px;
+	text-align: left;
+	text-decoration: none;
+	vertical-align: top
+}
+
+.sp_tv .group_tv .tv_recommend_list .thumb_area {
+	position: relative;
+	width: 82px;
+	height: 82px;
+	border-radius: 3px
+}
+
+.sp_tv .group_tv .tv_recommend_list .thumb_area:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	border: solid 1px rgba(0, 0, 0, .05);
+	border-radius: 3px;
+	background-color: rgba(0, 0, 0, .01)
+}
+
+.sp_tv .group_tv .tv_recommend_list .thumb_area img {
+	border-radius: 3px
+}
+
+.sp_tv .group_tv .tv_recommend_list .name_area {
+	display: block;
+	display: -webkit-box;
+	overflow: hidden;
+	max-height: 3.4rem;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	line-height: 1.7rem;
+	word-break: break-all;
+	word-wrap: break-word;
+	margin-top: 9px
+}
+
+.sp_tv .group_tv .tv_recommend_list .price_area {
+	margin-top: 3px
+}
+
+.sp_tv .group_tv .tv_recommend_list .info_area {
+	margin-top: 4px;
+	color: grey
+}
+
+.sp_tv .group_tv .cmm_pgs {
+	height: 46px;
+	margin: 3px 0 -18px;
+	line-height: 46px
+}
+
+.sp_tv .tv_error {
+	position: relative;
+	height: 215px
+}
+
+.sp_tv .etc_info {
+	padding-top: 13px;
+	border-top: 1px solid #f1f4f6
+}
+
+.sp_tv .etc_info .related {
+	overflow: hidden
+}
+
+.sp_tv .etc_info .related .tit {
+	float: left;
+	margin-right: 6px;
+	color: #202020
+}
+
+.sp_tv .etc_info .related .dsc {
+	overflow: hidden;
+	height: 2rem
+}
+
+.sp_tv .etc_info .related .dsc .item {
+	display: inline-block;
+	padding: 0 5px;
+	color: #404040;
+	vertical-align: top
+}
+
+.sp_tv .etc_info .info {
+	margin-top: 1px;
+	font-size: 1.2rem;
+	color: grey
+}
+
+.sp_tv .etc_info .info .info_inner {
+	display: inline-block;
+	overflow: hidden;
+	max-width: 100%;
+	vertical-align: top
+}
+
+.sp_tv .etc_info .info .ico_area {
+	float: right;
+	margin-left: 10px;
+	color: #b0b0b0
+}
+
+.sp_tv .etc_info .info .ico_area .logo {
+	display: inline-block;
+	margin: 0 -1px 0 -3px;
+	vertical-align: top
+}
+
+.sp_tv .etc_info .info .ico_area img {
+	width: auto !important;
+	height: 12px !important;
+	vertical-align: -2px
+} /* EOF */
